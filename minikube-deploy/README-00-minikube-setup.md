@@ -20,7 +20,7 @@ minikube start --nodes 3 -p mknode
 kubectl proxy --port 14081 --address='0.0.0.0' --disable-filter=true&
 minikube dashboard --url --profile mknode&
 
-kubectl get nodes --profile mknode
+kubectl get nodes 
 minikube delete
 ```
 
@@ -31,3 +31,8 @@ kubectl get nodes --show-labels
 minikube status -p mknode
 ```
 
+### Persistance Volume Setup.
+```shell
+kubectl apply -f ./minikube-setup-resources.yaml 
+kubectl delete -f ./minikube-setup-resources.yaml  
+```

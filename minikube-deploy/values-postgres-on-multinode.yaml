@@ -1,3 +1,8 @@
+volumePermissions:
+    enabled: true
 primary:
   nodeSelector:
     kubernetes.io/hostname: mknode
+  persistence:
+    enabled: true
+    existingClaim: "pg-persistent-volume-claim"

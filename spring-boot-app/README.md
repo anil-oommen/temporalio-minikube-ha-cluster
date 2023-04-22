@@ -4,6 +4,7 @@
 ```shell
 docker images
 docker image rm spring-boot-app:v2
+docker image rm spring-boot-app:latest
 sh gradlew jibDockerBuild
 
 # Copy Image from Docker Local to minikube 

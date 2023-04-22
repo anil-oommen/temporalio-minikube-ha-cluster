@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pg-persistent-volume
+  labels:
+    app.kubernetes.io/source: "kbe-setup.yaml"
+    app.kubernetes.io/instance: pg
+    app.kubernetes.io/name: "postgresql-pv"
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/minikube/manual-pv-data-pg-postgresql-0"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pg-persistent-volume-claim
+  labels:
+    app.kubernetes.io/source: "kbe-setup.yaml"
+    app.kubernetes.io/instance: pg
+    app.kubernetes.io/name: "postgresql-pv"
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
