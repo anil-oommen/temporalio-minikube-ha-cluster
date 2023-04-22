@@ -1,0 +1,3 @@
+primary:
+  nodeSelector:
+    kubernetes.io/hostname: mknode

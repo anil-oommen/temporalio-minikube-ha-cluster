@@ -1,0 +1,17 @@
+app:
+  config:
+    temporal:
+      tio1:
+        name: tio1
+        target: 192.168.1.205:15233
+        namespace: fastns
+        task-queue: "SIMPLE_TASK_QUEUE"
+
+server:
+  port: 8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,prometheus"

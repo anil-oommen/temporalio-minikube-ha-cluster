@@ -1,0 +1,12 @@
+server:
+  port: 8080
+
+app:
+  config:
+    temporal:
+      tio1:
+        name: tio1
+        target: tio1-temporal-frontend:7233
+        namespace: fastns
+        task-queue: "SIMPLE_TASK_QUEUE"
+
