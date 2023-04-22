@@ -11,7 +11,7 @@ server:
           port: 5432
           database: temporal01
           user: postgres
-          password: BRPjVrkODH
+          password: cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS
           schemaDir: schema/postgresql/v96/temporal/versioned
           # for a production deployment use this instead of `password` and provision the secret beforehand e.g. with a sealed secret
           # it has a single key called `password`
@@ -32,7 +32,7 @@ server:
           port: 5432
           database: temporal01_visibility
           user: postgres
-          password: BRPjVrkODH
+          password: cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS
           schemaDir: schema/postgresql/v96/visibility/versioned
           # for a production deployment use this instead of `password` and provision the secret beforehand e.g. with a sealed secret
           # it has a single key called `password`

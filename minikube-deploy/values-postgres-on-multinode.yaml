@@ -1,8 +1,10 @@
 volumePermissions:
     enabled: true
+auth:
+  existingSecret: single-use-dev-secrets
 primary:
   nodeSelector:
-    kubernetes.io/hostname: mknode
+    kubernetes.io/hostname: mknode-m02
   persistence:
     enabled: true
     existingClaim: "pg-persistent-volume-claim"

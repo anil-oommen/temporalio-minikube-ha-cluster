@@ -14,7 +14,8 @@ minikube delete
 
 ### Minikube Multiple Nodes
 ```shell
-minikube start --nodes 3 -p mknode
+mkdir $HOME/Development/temporal.io/_hostPersistentVolume/
+minikube start --nodes 3 --mount --mount-string="$HOME/Development/temporal.io/_hostPersistentVolume/:/mnt/host/" -p mknode
 
 # Dashboard and access from remote 
 kubectl proxy --port 14081 --address='0.0.0.0' --disable-filter=true&
@@ -33,6 +34,7 @@ minikube status -p mknode
 
 ### Persistance Volume Setup.
 ```shell
+
 kubectl apply -f ./minikube-setup-resources.yaml 
 kubectl delete -f ./minikube-setup-resources.yaml  
 ```

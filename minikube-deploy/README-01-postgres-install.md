@@ -16,7 +16,7 @@ helm install pg bitnami-repo/postgresql --atomic --timeout 180s
 ####  if minikube running multi nodes select the first primary node
 ```shell
 helm install pg bitnami-repo/postgresql -f values-postgres-on-multinode.yaml --atomic --timeout 180s 
-helm upgrade pg bitnami-repo/postgresql  
+helm upgrade pg bitnami-repo/postgresql -f values-postgres-on-multinode.yaml --atomic --timeout 180s  
 helm uninstall pg
 ```
 

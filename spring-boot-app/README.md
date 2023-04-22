@@ -28,3 +28,7 @@ docker run --name tio-spring-tryout -it spring-boot-app:v2
 ```shell
 docker load --input jib-image.tar
 ```
+### Git Push with SSH Key
+```shell
+git remote set-url origin git@github.com:anil-oommen/temporalio-minikube-ha-cluster.git
+```

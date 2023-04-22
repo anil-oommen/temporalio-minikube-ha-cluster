@@ -3,7 +3,7 @@ kind: PersistentVolume
 metadata:
   name: pg-persistent-volume
   labels:
-    app.kubernetes.io/source: "kbe-setup.yaml"
+    app.kubernetes.io/source: "minikube-setup-resources.yaml"
     app.kubernetes.io/instance: pg
     app.kubernetes.io/name: "postgresql-pv"
 spec:
@@ -15,14 +15,14 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/tmp/minikube/manual-pv-data-pg-postgresql-0"
+    path: "/mnt/host/pv-data-pg-postgresql-0"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pg-persistent-volume-claim
   labels:
-    app.kubernetes.io/source: "kbe-setup.yaml"
+    app.kubernetes.io/source: "minikube-setup-resources.yaml"
     app.kubernetes.io/instance: pg
     app.kubernetes.io/name: "postgresql-pv"
 spec:
@@ -32,3 +32,12 @@ spec:
   resources:
     requests:
       storage: 2Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: single-use-dev-secrets
+type: Opaque
+data:
+  #Base64 Encoded.
+  postgres-password: "Y0dGemMzZHZjbVJtYjNKQlF6Z3lOakk0TVRNeFdGSlM="
