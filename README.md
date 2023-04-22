@@ -7,6 +7,6 @@
  - Monitoring with Grafana+Prometheus  
  - Multi Cluster Replication.
 
-### Components
- - spring-boot-app with micrometer & prometheus
- - 
+### Modules
+ - [minikube-deploy](minikube-deploy/) Helm Charts & Setup Instructions for Components
+ - [spring-boot-app](spring-boot-app/README.md) with micrometer & prometheus and Helm Charts for deployment.
