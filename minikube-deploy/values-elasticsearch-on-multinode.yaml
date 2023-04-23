@@ -1,0 +1,33 @@
+clusterName: "es-elasticsearch"
+replicas: 1
+# imageTag: 7.17.3
+minimumMasterNodes: 1
+# antiAffinity: "soft"
+nodeSelector:
+    kubernetes.io/hostname: mknode-m02
+service:
+  type: ClusterIP
+
+#protocol: http
+persistence:
+  enabled: false
+
+secret:
+  enabled: true
+  password: ""
+
+resources:
+  requests:
+    cpu: "1000m"
+    memory: "512Mi"
+  limits:
+    cpu: "1000m"
+    memory: "512Mi"
+
+#resources:
+#  requests:
+#    cpu: "1000m"
+#    memory: "2Gi"
+#  limits:
+#    cpu: "1000m"
+#    memory: "2Gi"

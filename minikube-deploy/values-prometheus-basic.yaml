@@ -1,0 +1,9 @@
+
+# Disable PV when running in multi-node some issue.
+server:
+  persistentVolume:
+    enabled: false
+    existingClaim: "pr-persistent-volume-claim"
+    mountPath: "/mnt/host/pv-prometheus-data"
+    size: 2Gi
+    storageClass: manual

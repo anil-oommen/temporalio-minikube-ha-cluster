@@ -34,6 +34,41 @@ spec:
       storage: 2Gi
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pr-persistent-volume
+  labels:
+    app.kubernetes.io/source: "minikube-setup-resources.yaml"
+    app.kubernetes.io/instance: pr
+    app.kubernetes.io/name: "prometheus-pv"
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/host/pv-prometheus-data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pr-persistent-volume-claim
+  labels:
+    app.kubernetes.io/source: "minikube-setup-resources.yaml"
+    app.kubernetes.io/instance: pr
+    app.kubernetes.io/name: "prometheus-pv"
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
 kind: Secret
 metadata:
   name: single-use-dev-secrets

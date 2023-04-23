@@ -1,5 +1,0 @@
-
-# Disable PV when running in multi-node some issue.
-server:
-  persistentVolume:
-    enabled: false

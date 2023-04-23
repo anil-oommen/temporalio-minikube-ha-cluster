@@ -4,7 +4,8 @@ auth:
   existingSecret: single-use-dev-secrets
 primary:
   nodeSelector:
-    kubernetes.io/hostname: mknode-m02
+#    kubernetes.io/region: uk
+    kubernetes.io/os: linux
   persistence:
     enabled: true
     existingClaim: "pg-persistent-volume-claim"

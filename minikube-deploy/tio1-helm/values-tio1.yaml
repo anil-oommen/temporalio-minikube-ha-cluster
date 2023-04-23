@@ -95,7 +95,7 @@ elasticsearch:
   replicas: 1
 # determins if es-index-setup is pre or post install.
   external: false
-#  host: "elasticsearch-master"
+  host: "es-elasticsearch-master"
   port: "9200"
   version: "v7"
   scheme: "http"
