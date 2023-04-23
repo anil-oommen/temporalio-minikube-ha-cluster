@@ -97,3 +97,8 @@ fabric.properties
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+# Custom
+_hostPersistentVolume
+.tempPersistentVolume
+_kb8*Storage*/*
