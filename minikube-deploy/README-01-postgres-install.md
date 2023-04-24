@@ -7,7 +7,7 @@
 ```shell
 helm repo add bitnami-repo https://charts.bitnami.com/bitnami 
 ```
-####  (Option 1) Multi Node Postres *See NodeSelector*
+####  (Option 1) Customized Postres with persistane volume *See NodeSelector*
 ```shell
 helm install pg bitnami-repo/postgresql -f values-postgres-on-multinode.yaml --atomic --timeout 180s 
 
@@ -15,7 +15,7 @@ helm uninstall pg
 ```
 
 
-####   (Option 2) Basic when Single Node Minikube
+####   (Option 2) Basic when Single Node Minikube 
 ```shell
 helm install pg bitnami-repo/postgresql --atomic --timeout 180s 
 ```

@@ -4,7 +4,7 @@ replicas: 1
 minimumMasterNodes: 1
 # antiAffinity: "soft"
 nodeSelector:
-    kubernetes.io/hostname: mknode-m02
+    kubernetes.io/os: linux
 service:
   type: ClusterIP
 

@@ -2,13 +2,12 @@
 
 ### Build Image on Docker & Deploy to minikube
 ```shell
-docker images
-docker image rm spring-boot-app:v2
-docker image rm spring-boot-app:latest
+docker images | grep spring-boot-app
+docker image rm spring-boot-app:v2 spring-boot-app:latest 
 sh gradlew jibDockerBuild
 
 # Copy Image from Docker Local to minikube 
-minikube image load spring-boot-app:v2 -p mknode
+minikube image load spring-boot-app:latest -p kb8uk
 
 # Deploy with helm chart
 cd helm
@@ -16,7 +15,16 @@ helm install --atomic --timeout 120s app .
 helm uninstall app
 ```
 
-### Working just with Docker
+
+### Launching Workflows : 
+ Open Port Forwards 
+```shell
+cd ../minikube-deploy/bin
+sh  access-spring-boot-app.sh.sh
+```
+- Launch Workflows : http://192.168.1.205:28080/temporal/launch/tio1/10
+
+### (Alternative Not using Minikube) Working just with Docker
 ```shell
 docker image rm spring-boot-app:v2
 # Try Runining in Docker

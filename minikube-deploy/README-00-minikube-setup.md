@@ -25,8 +25,7 @@ mkdir $HOME/Development/temporal.io/_kb8ukStorage/
 
 minikube start --nodes 2 --mount --mount-string="$HOME/Development/temporal.io/_kb8ukStorage/:/mnt/host/" -p kb8uk
 
-kubectl label nodes kb8uk kubernetes.io/region=uk
-kubectl label nodes kb8uk-m02 kubernetes.io/region=uk
+kubectl label nodes kb8uk kb8uk-m02 kubernetes.io/region=uk
 
 # Dashboard and access from remote 
 kubectl proxy --port 14081 --address='0.0.0.0' --disable-filter=true&
@@ -37,6 +36,12 @@ minikube dashboard --url --profile kb8uk &
 minikube delete -p kb8uk
 
 ```
+### Persistance Volume & Other Resources Setup.
+```shell
+
+kubectl apply -f ./minikube-setup-resources.yaml 
+kubectl delete -f ./minikube-setup-resources.yaml  
+```
 
 ### Access Clusters
  - [dashboard](http://192.168.1.205:14081/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/)
@@ -45,12 +50,6 @@ kubectl get nodes --show-labels
 minikube status -p mknode
 ```
 
-### Persistance Volume Setup.
-```shell
-
-kubectl apply -f ./minikube-setup-resources.yaml 
-kubectl delete -f ./minikube-setup-resources.yaml  
-```
 
 #### Cluster 2 : AP (Under Development)
  - Only One Profile can be accessed via dashboard on a single Machine!
