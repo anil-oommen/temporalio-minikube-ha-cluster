@@ -5,10 +5,15 @@ import com.oom.temporal.baremin.activties.SimpleActivitiesImpl;
 import com.oom.temporal.baremin.workflow.SimpleWorkflow;
 import com.oom.temporal.baremin.workflow.SimpleWorkflowImpl;
 import com.oom.temporal.config.TioInstance;
+import com.uber.m3.tally.RootScopeBuilder;
+import com.uber.m3.tally.Scope;
+import com.uber.m3.util.ImmutableMap;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.client.WorkflowStub;
+import io.temporal.common.reporter.MicrometerClientStatsReporter;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 import io.temporal.worker.Worker;
@@ -17,12 +22,14 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 @Component
 @Slf4j
@@ -30,6 +37,10 @@ public class SimpleWorkflowControl {
 
     @Autowired
     TioConfig tioConf;
+
+    @Autowired
+    Function<String,Scope> funScope;
+
     @PostConstruct
     void startAllWorkers(){
         tioConf.getTemporal().values()
@@ -40,8 +51,10 @@ public class SimpleWorkflowControl {
         // Get a Workflow service stub.
         WorkflowServiceStubs service =
                 WorkflowServiceStubs.newInstance(
-                        WorkflowServiceStubsOptions.newBuilder().setTarget(tioInstance
-                                .getTarget()).build());;
+                        WorkflowServiceStubsOptions.newBuilder()
+                                .setMetricsScope(funScope.apply(tioInstance.getName()))
+                                .setTarget(tioInstance.getTarget())
+                                .build());;
 
         //WorkflowServiceStubs.newLocalServiceStubs();
 
@@ -88,7 +101,9 @@ public class SimpleWorkflowControl {
     public String launchFromStub(String inputId,TioInstance tioInstance){
         WorkflowServiceStubs service = WorkflowServiceStubs.newInstance(
                 WorkflowServiceStubsOptions.newBuilder()
-                        .setTarget(tioInstance.getTarget()).build());
+                        .setMetricsScope(funScope.apply(tioInstance.getName()))
+                        .setTarget(tioInstance.getTarget())
+                        .build());
 
         // WorkflowClient can be used to start, signal, query, cancel, and terminate Workflows.
         WorkflowClientOptions clientOptions = WorkflowClientOptions.newBuilder()

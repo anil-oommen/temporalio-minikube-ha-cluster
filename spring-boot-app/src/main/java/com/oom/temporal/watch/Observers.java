@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@Deprecated // Spring AOP, wort work for Temporal Functions.
 public class Observers {
     @Bean
     public TimedAspect timedAspect(MeterRegistry registry) {
