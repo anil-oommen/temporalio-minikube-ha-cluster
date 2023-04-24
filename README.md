@@ -40,8 +40,8 @@ History Service Dashboards > Workflow Task Insight | Workflow Task Breakdown
  - schedule_activity count 
  - Prometheus Query ```schedule_activity_command {operation="RespondWorkflowTaskCompleted"}```
  - , complete_workflow count.
-
-Spring Application Worker, Metrics added.  
+ 
+ Spring Application Worker, Metrics added.  
  - Seconds ```sum by(hostname)(temporal_workflow_endtoend_latency_seconds_max{job="prometheus-spring-pods"})```
  - Counter ```temporal_workflow_completed_total{job="prometheus-spring-pods"}```
  - ```temporal_workflow_active_thread_count{job="prometheus-spring-pods"}```
