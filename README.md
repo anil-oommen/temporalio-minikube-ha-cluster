@@ -16,23 +16,26 @@
 #### Resources:
  - Recommended Metrics (https://docs.temporal.io/application-development/worker-performance)
 
-#### Prometheus Evaluate Metrics :
- [prometheus](http://192.168.1.205:18080/graph?g0.expr=&g0.tab=1&g0.stacked=0&g0.show_exemplars=0&g0.range_input=1h)
- - Get all Metrics Names ```group by(__name__) ({__name__!=""})```
-
-#### Spring Application Metrics. (Filter by {job="prometheus-spring-pods"})
-Grafana Metrics Used, used prometheus to analyse e.g. ```temporal_worker_task_slots_available{job="prometheus-spring-pods"}```
+####
+Prometheus Evaluate Metrics :
+[prometheus](http://192.168.1.205:18080/graph?g0.expr=&g0.tab=1&g0.stacked=0&g0.show_exemplars=0&g0.range_input=1h)
+- Get all Metrics Names ```group by(__name__) ({__name__!=""})```
+### Spring Application Metrics. (Filter by {job="prometheus-spring-pods"})
+Graana Metrics Used, used prometheus to analyse e.g. ```temporal_worker_task_slots_available{job="prometheus-spring-pods"}```
 ```
-	sum by(hostname) (temporal_worker_task_slots_available{job="prometheus-spring-pods"})
-	sum by(hostname) (temporal_workflow_task_schedule_to_start_latency_seconds_max{worker_type="WorkflowWorker",job="prometheus-spring-pods"})
-	sum by(hostname) (temporal_workflow_task_schedule_to_start_latency_seconds_sum{worker_type="WorkflowWorker",job="prometheus-spring-pods"})
-	sum by(activity_type) (temporal_activity_schedule_to_start_latency_seconds_max{job="prometheus-spring-pods"})
-	sum by(activity_type) (temporal_activity_schedule_to_start_latency_seconds_sum{job="prometheus-spring-pods"})
-	sum by(hostname) (temporal_sticky_cache_size{job="prometheus-spring-pods"})
-	sum by(hostname) (temporal_workflow_active_thread_count{job="prometheus-spring-pods"})
+sum by(hostname) (temporal_worker_task_slots_available{job="prometheus-spring-pods"})
+sum by(hostname) (temporal_workflow_task_schedule_to_start_latency_seconds_max{worker_type="WorkflowWorker",job="prometheus-spring-pods"})
+sum by(hostname) (temporal_workflow_task_schedule_to_start_latency_seconds_sum{worker_type="WorkflowWorker",job="prometheus-spring-pods"})
+sum by(activity_type) (temporal_activity_schedule_to_start_latency_seconds_max{job="prometheus-spring-pods"})
+sum by(activity_type) (temporal_activity_schedule_to_start_latency_seconds_sum{job="prometheus-spring-pods"})
+sum by(hostname) (temporal_sticky_cache_size{job="prometheus-spring-pods"})
+sum by(hostname) (temporal_workflow_active_thread_count{job="prometheus-spring-pods"})
 ```
 
 ![grafana-temporal-worker.png](grafana-temporal-worker.png "grafana-temporal-worker.png")
+![grafana-temporal-worker-slots.png](grafana-temporal-worker-slots.png "grafana-temporal-worker-slots.png")
+![grafana-temporal-schedule-to-starts.png](grafana-temporal-schedule-to-starts.png "grafana-temporal-schedule-to-starts.png")
+![grafana-temporal-cache-actiive-thread.png](grafana-temporal-cache-actiive-thread.png "grafana-temporal-cache-actiive-thread.png")
 
 #### Section Under development.
 
