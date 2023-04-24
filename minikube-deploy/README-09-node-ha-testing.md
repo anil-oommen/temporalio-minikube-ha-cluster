@@ -4,7 +4,7 @@
 ```shell
 kubectl get nodes
 kubectl cordon mknode
-kubectl delete pod nginx.
+kubectl delete pod pg-postgresql-0
 
 
 kubectl drain mknode

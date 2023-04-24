@@ -11,7 +11,7 @@ minikube image load spring-boot-app:latest -p kb8uk
 
 # Deploy with helm chart
 cd helm
-helm install --atomic --timeout 120s app .
+helm install --atomic --timeout 4m app .
 helm uninstall app
 ```
 
