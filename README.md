@@ -21,3 +21,5 @@ History Service Dashboards > Workflow Task Insight | Workflow Task Breakdown
  - schedule_activity count 
  - Prometheus Query ```schedule_activity_command {operation="RespondWorkflowTaskCompleted"}```
  - , complete_workflow count.
+
+![grafana-temporal-worker.png](grafana-temporal-worker.png "grafana-temporal-worker.png")
