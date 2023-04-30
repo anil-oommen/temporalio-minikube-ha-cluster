@@ -49,7 +49,11 @@ kubectl delete -f ./minikube-setup-resources.yaml
 kubectl get nodes --show-labels
 minikube status -p mknode
 ```
-
+### Enable Metrics
+```
+ minikube addons list | grep metrics
+ minikube addons enable metrics-server -p kb8uk
+```
 
 #### Cluster 2 : AP (Under Development)
  - Only One Profile can be accessed via dashboard on a single Machine!

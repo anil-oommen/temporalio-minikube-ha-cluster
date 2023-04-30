@@ -14,7 +14,7 @@ jib {
         tags = ['v2']
     }
     container {
-        jvmFlags = ['-Xms512m']
+        jvmFlags = ['-Xms512m','-Xmx2g']
         mainClass = 'com.oom.temporal.LauncherMain'
         args = []
         ports = ['8080/tcp']
