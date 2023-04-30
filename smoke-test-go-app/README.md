@@ -26,12 +26,9 @@
 ### Loading Image to Docker and running helm
 ```shell
 # Copy Image from Docker Local to minikube 
-minikube image load smoke-test-go-app:0.0.5 -p kb8uk
+minikube image load smoke-test-go-app:0.0.6 -p kb8uk
 
 # Deploy with helm chart
-helm install --atomic --timeout 90s --set image.tag=0.0.5 smoke.app helm
+helm install --atomic --timeout 90s --set image.tag=0.0.6 smoke.app helm
 helm uninstall smoke.app
 ```
-
-
-### https://wearenotch.com/way-to-go-combining-go-and-gradle/

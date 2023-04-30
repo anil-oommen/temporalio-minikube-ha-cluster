@@ -8,18 +8,22 @@ plugins {
 import com.bmuschko.gradle.docker.tasks.image.*
 
 group 'com.oom.temporal'
-version '0.0.5'
+version '0.0.6'
 
-def filesToBuildGoImage = ["go.mod","go.sum","Makefile","smoke-test-app.go"]
+def filesToBuildGoImage = ['go.mod','go.sum','Makefile']
+def folderToBuildGoImage = ['cmd','pkg']
 def (os,arch) = ['linux','amd64']
 
 task copyBuildDockerDeps(type: Copy){
     filesToBuildGoImage.each { 
         fileToCopy ->
-            copy {
-                from fileToCopy
-                into "$buildDir/docker/"
-            }
+            copy {from fileToCopy into "$buildDir/docker/"}
+            //project.logger.lifecycle("Copying ${fileToCopy} > $buildDir/docker/")
+        }
+    folderToBuildGoImage.each { 
+        folderToCopy ->
+            copy {from folderToCopy into "$buildDir/docker/${folderToCopy}"}
+            //project.logger.lifecycle("Copying ${folderToCopy} > $buildDir/docker/${folderToCopy}")
         }
 }
 
@@ -35,15 +39,22 @@ task createDockerFile(type: Dockerfile){
     filesToBuildGoImage.each { 
         fileToCopy ->copyFile(fileToCopy,'./')
     }
+    copyFile('cmd','./cmd')
+    copyFile('pkg','./pkg')
     runCommand('go mod download')
-    runCommand("make build GOOS=${os} GOARCH=${arch} PROJECT_NAME=${project.name} PROJECT_BUILD_DIR=.")
+    runCommand('mkdir build')
+    runCommand("make buildGo GOOS=${os} GOARCH=${arch} PROJECT_NAME=${project.name} PROJECT_BUILD_DIR=.")
+    //runCommand('ls -la cmd/server')
+    //runCommand('ls -la build')
+    //runCommand('ls -la')
 
     /* ----- Stage 2 : Test Build Image */
     def runTestStage = new Dockerfile.From('build-stage')
         .withStage("run-test-stage")
     from(runTestStage)
 
-    runCommand("make test GOOS=${os} GOARCH=${arch} PROJECT_NAME=${project.name} PROJECT_BUILD_DIR=.")
+    runCommand("make testGo GOOS=${os} GOARCH=${arch} PROJECT_NAME=${project.name} PROJECT_BUILD_DIR=.")
+    
 
     /* ----- Stage 3 : Build Release Image  */
     def buildReleaseStage = new Dockerfile.From('gcr.io/distroless/base-debian11')
@@ -52,7 +63,7 @@ task createDockerFile(type: Dockerfile){
     
     workingDir('/')
     def copyExecutable = new Dockerfile.CopyFile("/app/${os}-${arch}/${project.name}","/${project.name}")
-    copyExecutable.withStage('build-stage')
+        .withStage('build-stage')
     copyFile(copyExecutable)
     exposePort(8080)
     user('nonroot:nonroot')
@@ -78,7 +89,7 @@ task goBuild {
     doLast {
         exec {
             workingDir project.projectDir
-            commandLine "make", "build", "GOOS=${os}", "GOARCH=${arch}",
+            commandLine "make", "buildGo", "GOOS=${os}", "GOARCH=${arch}",
                 "PROJECT_NAME=${project.name}","PROJECT_BUILD_DIR=${project.buildDir}/plugin"
         }
     }
@@ -89,7 +100,7 @@ task goTidy {
     doLast {
         exec {
             workingDir project.projectDir
-            commandLine "make", "tidy", "GOOS=${os}", "GOARCH=${arch}"
+            commandLine "make", "tidyGo", "GOOS=${os}", "GOARCH=${arch}"
         }
     }
 }
@@ -99,7 +110,7 @@ task goTest {
     doLast {
         exec {
             workingDir project.projectDir
-            commandLine "make", "test", "GOOS=${os}", "GOARCH=${arch}",
+            commandLine "make", "testGo", "GOOS=${os}", "GOARCH=${arch}",
                 "PROJECT_NAME=${project.name}","PROJECT_BUILD_DIR=${project.buildDir}/plugin"
         }
     }
@@ -109,7 +120,7 @@ task goListModules {
   doLast {
     exec {
         workingDir project.projectDir
-        commandLine "make", "modules", "GOOS=${os}", "GOARCH=${arch}"
+        commandLine "make", "modListGo", "GOOS=${os}", "GOARCH=${arch}"
       }
   }
 }
