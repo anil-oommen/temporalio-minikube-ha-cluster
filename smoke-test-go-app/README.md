@@ -32,3 +32,6 @@ cd helm
 helm install --atomic --timeout 30s smoke.app .
 helm uninstall smoke.app
 ```
+
+
+### https://wearenotch.com/way-to-go-combining-go-and-gradle/

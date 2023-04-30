@@ -1,0 +1,8 @@
+tidy:
+	env GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=0 go mod tidy -v
+build:
+	env GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=0 go build -o ${PROJECT_BUILD_DIR}/${GOOS}-${GOARCH}/${PROJECT_NAME}
+test:
+	env GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=0 go test -o ${PROJECT_BUILD_DIR}/${GOOS}-${GOARCH}/${PROJECT_NAME}
+modules:
+	env GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=0 go list -m all

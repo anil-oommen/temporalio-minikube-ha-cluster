@@ -1,0 +1,119 @@
+plugins {
+    id 'base'
+    // https://bmuschko.github.io/gradle-docker-plugin/current/user-guide/#remote_api_plugin
+    id "com.bmuschko.docker-remote-api" version "9.3.1"
+}
+
+// Import task types
+import com.bmuschko.gradle.docker.tasks.image.*
+
+group 'com.oom.temporal'
+version '0.0.5'
+
+def filesToBuildGoImage = ["go.mod","go.sum","Makefile","smoke-test-app.go"]
+def (os,arch) = ['linux','amd64']
+
+task copyBuildDockerDeps(type: Copy){
+    filesToBuildGoImage.each { 
+        fileToCopy ->
+            copy {
+                from fileToCopy
+                into "$buildDir/docker/"
+            }
+        }
+}
+
+task createDockerFile(type: Dockerfile){
+    dependsOn(copyBuildDockerDeps)
+
+    /* ----- Stage 1 : Prepare Build Image */
+    def buildStage = new Dockerfile.From('golang:1.19')
+        .withStage("build-stage")
+    from(buildStage)
+
+    workingDir('/app')
+    filesToBuildGoImage.each { 
+        fileToCopy ->copyFile(fileToCopy,'./')
+    }
+    runCommand('go mod download')
+    runCommand("make build GOOS=${os} GOARCH=${arch} PROJECT_NAME=${project.name} PROJECT_BUILD_DIR=.")
+
+    /* ----- Stage 2 : Test Build Image */
+    def runTestStage = new Dockerfile.From('build-stage')
+        .withStage("run-test-stage")
+    from(runTestStage)
+
+    runCommand("make test GOOS=${os} GOARCH=${arch} PROJECT_NAME=${project.name} PROJECT_BUILD_DIR=.")
+
+    /* ----- Stage 3 : Build Release Image  */
+    def buildReleaseStage = new Dockerfile.From('gcr.io/distroless/base-debian11')
+        .withStage('build-release-stage')
+    from(buildReleaseStage)
+    
+    workingDir('/')
+    def copyExecutable = new Dockerfile.CopyFile("/app/${os}-${arch}/${project.name}","/${project.name}")
+    copyExecutable.withStage('build-stage')
+    copyFile(copyExecutable)
+    exposePort(8080)
+    user('nonroot:nonroot')
+    entryPoint("/${project.name}")
+
+}
+
+task buildImage(type: DockerBuildImage){
+    dependsOn(createDockerFile)
+    images.add("${project.name}:${project.version}")
+}
+
+
+/*
+ * Go bulding with Make with Custom Wrapper Tasks in Gradle.
+ * https://wearenotch.com/way-to-go-combining-go-and-gradle/ 
+ *
+ * Archived Defunct Plugin will not be used. https://github.com/gogradle/gogradle/blob/master/docs/tasks.md
+ */
+tasks.named("build") { finalizedBy("goBuild") }
+task goBuild {
+    group 'golang'
+    doLast {
+        exec {
+            workingDir project.projectDir
+            commandLine "make", "build", "GOOS=${os}", "GOARCH=${arch}",
+                "PROJECT_NAME=${project.name}","PROJECT_BUILD_DIR=${project.buildDir}/plugin"
+        }
+    }
+}
+
+task goTidy {
+    group 'golang'
+    doLast {
+        exec {
+            workingDir project.projectDir
+            commandLine "make", "tidy", "GOOS=${os}", "GOARCH=${arch}"
+        }
+    }
+}
+
+task goTest {
+    group 'golang'
+    doLast {
+        exec {
+            workingDir project.projectDir
+            commandLine "make", "test", "GOOS=${os}", "GOARCH=${arch}",
+                "PROJECT_NAME=${project.name}","PROJECT_BUILD_DIR=${project.buildDir}/plugin"
+        }
+    }
+}
+
+task goListModules {
+  doLast {
+    exec {
+        workingDir project.projectDir
+        commandLine "make", "modules", "GOOS=${os}", "GOARCH=${arch}"
+      }
+  }
+}
+
+repositories {
+    mavenCentral()
+}
