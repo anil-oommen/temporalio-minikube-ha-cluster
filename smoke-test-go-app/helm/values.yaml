@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: smoke-test-app
+  repository: smoke-test-go-app
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "slim"
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: "smoke-test-app"

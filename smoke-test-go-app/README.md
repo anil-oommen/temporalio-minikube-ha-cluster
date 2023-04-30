@@ -8,28 +8,28 @@
     }
 ```
 
-
+## Runing on Local Build & Run
 ### Running Locally
 ```shell
-go run .
-```
+./gradlew goBuild
 
-### MultiStage Build for Smaller Image size. 
+./gradlew goTidy
+./gradlew goTest
+```
+## Building Docker Image 
 ```shell
-docker images | grep smoke-test-app
-docker image rm smoke-test-app:slim 
-
-docker build -t smoke-test-app:slim -f Dockerfile .
+# build Docker Image
+./gradlew buildImage
 ```
+
 
 ### Loading Image to Docker and running helm
 ```shell
 # Copy Image from Docker Local to minikube 
-minikube image load smoke-test-app:slim -p kb8uk
+minikube image load smoke-test-go-app:0.0.5 -p kb8uk
 
 # Deploy with helm chart
-cd helm
-helm install --atomic --timeout 30s smoke.app .
+helm install --atomic --timeout 90s --set image.tag=0.0.5 smoke.app helm
 helm uninstall smoke.app
 ```
 

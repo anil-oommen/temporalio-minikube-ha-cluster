@@ -6,10 +6,12 @@
  - Advanced visibility with ES & CustomSearch Attributes.
  - Monitoring with Grafana+Prometheus  
  - Multi Cluster Replication.
+ - Go Smoke Test Application with Docker Builds.
 
 ### Modules
  - [minikube-deploy](minikube-deploy/) Helm Charts & Setup Instructions for Components
  - [spring-boot-app](spring-boot-app/README.md) with micrometer & prometheus and Helm Charts for deployment.
+ - [smoke-test-go-app](smoke-test-go-app) Go Application to Smoke Test Temporal Workflow.
 
 ### Observability With Grafana :
 

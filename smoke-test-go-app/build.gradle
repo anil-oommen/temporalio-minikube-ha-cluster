@@ -72,7 +72,7 @@ task buildImage(type: DockerBuildImage){
  *
  * Archived Defunct Plugin will not be used. https://github.com/gogradle/gogradle/blob/master/docs/tasks.md
  */
-tasks.named("build") { finalizedBy("goBuild") }
+//tasks.named("build") { finalizedBy("goBuild") }
 task goBuild {
     group 'golang'
     doLast {
