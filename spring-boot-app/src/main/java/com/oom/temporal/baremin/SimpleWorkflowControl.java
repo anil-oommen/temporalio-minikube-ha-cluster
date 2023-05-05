@@ -50,7 +50,7 @@ public class SimpleWorkflowControl {
 
         // Get a Workflow service stub.
         WorkflowServiceStubs service =
-                WorkflowServiceStubs.newInstance(
+                WorkflowServiceStubs.newServiceStubs(
                         WorkflowServiceStubsOptions.newBuilder()
                                 .setMetricsScope(funScope.apply(tioInstance.getName()))
                                 .setTarget(tioInstance.getTarget())
