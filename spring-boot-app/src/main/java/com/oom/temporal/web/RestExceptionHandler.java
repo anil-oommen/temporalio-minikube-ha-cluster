@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class RestExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
-    ResponseEntity errorNotHandled(RuntimeException ex) {
+    ResponseEntity<String> errorNotHandled(RuntimeException ex) {
         return ResponseEntity.internalServerError().body(ex.getMessage());
     }
 }

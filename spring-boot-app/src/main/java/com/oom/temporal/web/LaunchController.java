@@ -5,10 +5,9 @@ import com.oom.temporal.baremin.SimpleWorkflowControl;
 import com.oom.temporal.config.TioConfig;
 import com.oom.temporal.service.WorkflowConnect;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -23,11 +22,38 @@ public class LaunchController {
 
     @Autowired
     WorkflowConnect workflowConnect;
-    @GetMapping("/launch/{tio}/{count}")
-    public Mono<List<String>> launch(@PathVariable("tio") String tioInstance,
-                                     @PathVariable("count") int count) {
-        return workflowConnect.launchWorkflow(tioInstance,count);
 
+    String responseContentTemplate = """
+            <html><body>%s</body></html>
+            """;
+
+    @GetMapping("/launch/{tio}/{count}")
+    public Mono<ResponseEntity<String>> launch(@PathVariable("tio") String tioInstance,
+                                     @PathVariable("count") int count) {
+        return workflowConnect.launchWorkflow(tioInstance,count)
+                .map(l->
+                    l.entrySet().stream().
+                    map((emap)->
+                            String.format("%s :: %s &nbsp;<a href='/temporal/cancel-activity/%s/%s?runid=%s&reason=user_cancel' " +
+                                    "target='_blank'>cancel activity</a>",
+                                    emap.getKey(),emap.getValue(),
+                                    tioInstance,emap.getKey(),emap.getValue()))
+                        .collect(Collectors.joining("<br>")))
+                .map(content->
+                    ResponseEntity.accepted().contentType(MediaType.TEXT_HTML)
+                        .body(String.format(responseContentTemplate,content)));
+
+
+
+    }
+
+    @GetMapping("/cancel-activity/{tio}/{workflowid}")
+    public Mono<String> cancelActivity(@PathVariable("tio") String tioInstance,
+                                               @PathVariable("workflowid") String workflowid,
+                                               @RequestParam("runid") String runid,
+                                       @RequestParam(name = "reason")  String reason
+                                               ) {
+        return workflowConnect.cancelActivity(tioInstance, workflowid,runid,reason);
     }
 
 }

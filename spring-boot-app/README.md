@@ -1,5 +1,13 @@
-## Spring Boot App with Temporal Workflows and Activties running. 
+## Spring Boot App with Temporal Workflows and Activities running. 
 
+## Local Development
+ * use Local Temporallite.
+ * [Launch Workflow](http://localhost:8081/temporal/launch/tio1/1)
+```shell
+temporalite.exe start -namespace fastns
+```
+
+## Deploy on Minikube
 ### Build Image on Docker & Deploy to minikube
 ```shell
 docker images | grep spring-boot-app

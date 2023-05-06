@@ -5,15 +5,11 @@ import com.oom.temporal.baremin.activties.SimpleActivitiesImpl;
 import com.oom.temporal.baremin.workflow.SimpleWorkflow;
 import com.oom.temporal.baremin.workflow.SimpleWorkflowImpl;
 import com.oom.temporal.config.TioInstance;
-import com.uber.m3.tally.RootScopeBuilder;
 import com.uber.m3.tally.Scope;
-import com.uber.m3.util.ImmutableMap;
-import io.micrometer.core.instrument.MeterRegistry;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.client.WorkflowStub;
-import io.temporal.common.reporter.MicrometerClientStatsReporter;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 import io.temporal.worker.Worker;
@@ -21,8 +17,6 @@ import io.temporal.worker.WorkerFactory;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -98,7 +92,7 @@ public class SimpleWorkflowControl {
         log.info("Worker Started: {}" , tioInstance.toString());
     }
 
-    public String launchFromStub(String inputId,TioInstance tioInstance){
+    Function<TioInstance,WorkflowClient> funcWorkflowClientForStub = (tioInstance)->{
         WorkflowServiceStubs service = WorkflowServiceStubs.newInstance(
                 WorkflowServiceStubsOptions.newBuilder()
                         .setMetricsScope(funScope.apply(tioInstance.getName()))
@@ -108,24 +102,32 @@ public class SimpleWorkflowControl {
         // WorkflowClient can be used to start, signal, query, cancel, and terminate Workflows.
         WorkflowClientOptions clientOptions = WorkflowClientOptions.newBuilder()
                 .setNamespace(tioInstance.getNamespace()).build();
-        WorkflowClient client = WorkflowClient.newInstance(service,clientOptions);
+        return WorkflowClient.newInstance(service,clientOptions);
+    };
+    public String cancelActivity(TioInstance tioInstance, String workflowId, String runId,String cancelReason){
+        WorkflowClient client = funcWorkflowClientForStub.apply(tioInstance);
+        client.newWorkflowStub(SimpleWorkflow.class,workflowId,Optional.of(runId))
+                .signalCancelActivity(cancelReason);
+        log.info("Cancel Activity Signal Sent:" + cancelReason);
+        return "Cancel Activity Signal Reason:" + cancelReason;
+    }
+    public Map.Entry<String,String> launchWorkflow(String inputId, TioInstance tioInstance){
 
-        /*
-         * Set Workflow options such as WorkflowId and Task Queue so the worker knows where to list and which workflows to execute.
-         */
+        WorkflowClient client = funcWorkflowClientForStub.apply(tioInstance);// WorkflowClient.newInstance(service,clientOptions);
 
-        WorkflowOptions options = WorkflowOptions.newBuilder()
-                .setWorkflowId(String.format("SWF%s",inputId))
-                .setTaskQueue(tioInstance.getTaskQueue())
-                .setSearchAttributes(addSearchAttributes(inputId))
-                .build();
+        var workflowId = String.format("SWF%s",inputId);
+        WorkflowOptions.Builder optBuilder = WorkflowOptions.newBuilder()
+                .setWorkflowId(workflowId)
+                .setTaskQueue(tioInstance.getTaskQueue());
+
+        if(tioInstance.isUseSearchAttribute())
+            optBuilder.setSearchAttributes(addSearchAttributes(inputId));
 
         // Create the workflow client stub. It is used to start our workflow execution.
-        SimpleWorkflow workflow = client.newWorkflowStub(SimpleWorkflow.class, options);
+        SimpleWorkflow workflow = client.newWorkflowStub(SimpleWorkflow.class, optBuilder.build());
 
-        CompletableFuture<String> futureResult = WorkflowClient.execute(workflow::start, inputId);
-
-        return WorkflowStub.fromTyped(workflow).getExecution().getRunId();
+        CompletableFuture<String> futureResult = WorkflowClient.execute(workflow::runWorkflow, inputId);
+        return Map.entry(workflowId,WorkflowStub.fromTyped(workflow).getExecution().getRunId());
     }
 
     private Map<String, String> addSearchAttributes(String appReference) {

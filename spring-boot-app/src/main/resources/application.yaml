@@ -3,9 +3,11 @@ app:
     temporal:
       tio1:
         name: tio1
-        target: 192.168.1.205:15233
+        target: localhost:7233
         namespace: fastns
         task-queue: "SIMPLE_TASK_QUEUE"
+        use-search-attribute: false
+
 
 server:
   port: 8081

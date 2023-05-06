@@ -32,28 +32,32 @@ version '0.0.5'
 repositories {
     mavenCentral()
 }
+ext{
+    temporalVersion = '1.19.1'
+    lombokVersion = '1.18.26'
+}
+
 
 dependencies {
+    implementation "io.temporal:temporal-sdk:${temporalVersion}"
 
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation group: 'io.temporal', name: 'temporal-sdk', version: '1.19.1'
-
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 
 
-    compileOnly 'org.projectlombok:lombok:1.18.26'
-    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    testCompileOnly 'org.projectlombok:lombok:1.18.26'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
-    testImplementation group: 'io.temporal', name: 'temporal-testing', version: '1.19.1'
+    testImplementation "io.temporal:temporal-testing:${temporalVersion}"
 }
 
 test {

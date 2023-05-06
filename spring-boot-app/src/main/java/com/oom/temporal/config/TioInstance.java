@@ -12,4 +12,5 @@ public class TioInstance {
     String target;
     String namespace;
     String taskQueue;
+    boolean useSearchAttribute;
 }
