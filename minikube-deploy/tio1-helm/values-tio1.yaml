@@ -1,6 +1,14 @@
 # debug: true
 server:
+  dynamicConfig:
+    matching.numTaskqueueReadPartitions:
+    - value: 10
+      constraints: {}
+    matching.numTaskqueueWritePartitions:
+    - value: 10
+      constraints: {}
   config:
+    numHistoryShards: 512
     persistence:
       default:
         driver: "sql"
