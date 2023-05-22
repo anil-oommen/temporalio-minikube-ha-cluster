@@ -23,7 +23,15 @@ kubectl get nodes --show-labels
 
 mkdir $HOME/Development/temporal.io/_kb8ukStorage/
 
+## Static Decide on CPU and Memory for Nodes. MAX
+minikube start --nodes 2 --memory max --cpus max --mount --mount-string="$HOME/Development/temporal.io/_kb8ukStorage/:/mnt/host/" -p kb8uk
+
+minikube start --nodes 2 --memory 8192 --cpus 4 --mount --mount-string="$HOME/Development/temporal.io/_kb8ukStorage/:/mnt/host/" -p kb8uk
+
+## Dynamic Resource Allocation. Values for Second too low.
 minikube start --nodes 2 --mount --mount-string="$HOME/Development/temporal.io/_kb8ukStorage/:/mnt/host/" -p kb8uk
+
+kubectl describe nodes
 
 kubectl label nodes kb8uk kb8uk-m02 kubernetes.io/region=uk
 
@@ -33,6 +41,7 @@ minikube dashboard --url --profile kb8uk &
 
 
 # cleanup 
+minikube stop -p kb8uk
 minikube delete -p kb8uk
 
 ```

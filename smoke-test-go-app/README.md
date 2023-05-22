@@ -8,6 +8,14 @@
     }
 ```
 
+## Managing Dependencies
+```shell
+# add 3rd party modules
+go get "go.temporal.io/sdk/client"
+# cleanup 3rd party modules if not used in .go
+go mod tidy
+```
+
 ## Runing on Local Build & Run
 ### Running Locally
 ```shell
@@ -15,6 +23,9 @@
 
 ./gradlew goTidy
 ./gradlew goTest
+
+go run cmd/server/main.go
+
 ```
 ## Building Docker Image 
 ```shell
