@@ -1,14 +1,14 @@
-package com.oom.temporal.baremin.workflow;
+package com.oom.temporal.workers.workflow;
 
 import io.temporal.workflow.SignalMethod;
 import io.temporal.workflow.WorkflowInterface;
 import io.temporal.workflow.WorkflowMethod;
 
 @WorkflowInterface
-public interface SimpleWorkflow {
+public interface CancelableWorkflow {
     @WorkflowMethod
-    String runWorkflow(String name);
+    String runPrimaryWorkflow(String name);
 
     @SignalMethod
-    void signalCancelActivity(String reason);
+    void signalCancelPrimaryActivity(String reason);
 }

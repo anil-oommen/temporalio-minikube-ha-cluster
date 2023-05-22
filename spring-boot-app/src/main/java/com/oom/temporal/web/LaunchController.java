@@ -1,8 +1,6 @@
 package com.oom.temporal.web;
 
 
-import com.oom.temporal.baremin.SimpleWorkflowControl;
-import com.oom.temporal.config.TioConfig;
 import com.oom.temporal.service.WorkflowConnect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -10,10 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @RestController
 @RequestMapping("/temporal")
@@ -27,10 +22,19 @@ public class LaunchController {
             <html><body>%s</body></html>
             """;
 
-    @GetMapping("/launch/{tio}/{count}")
-    public Mono<ResponseEntity<String>> launch(@PathVariable("tio") String tioInstance,
+    @GetMapping("/")
+    public Mono<ResponseEntity<String>> index() {
+        return Mono.just( ResponseEntity.accepted().contentType(MediaType.TEXT_HTML)
+                .body(String.format(responseContentTemplate,"""
+                        <a href=\"launch-loaded/tio1/0\" > launch-loaded/tio1/0</a> <br>
+                        <a href=\"launch-cancellable/tio1/0\" > launch-cancellable/tio1/0</a> 
+                        """)));
+    }
+
+    @GetMapping("/launch-cancellable/{tio}/{count}") /* FOR CANCELLABLE WORKFLOW */
+    public Mono<ResponseEntity<String>> launchCancellable(@PathVariable("tio") String tioInstance,
                                      @PathVariable("count") int count) {
-        return workflowConnect.launchWorkflow(tioInstance,count)
+        return workflowConnect.launchCancellableWorkflow(tioInstance,count)
                 .map(l->
                     l.entrySet().stream().
                     map((emap)->
@@ -43,8 +47,6 @@ public class LaunchController {
                     ResponseEntity.accepted().contentType(MediaType.TEXT_HTML)
                         .body(String.format(responseContentTemplate,content)));
 
-
-
     }
 
     @GetMapping("/cancel-activity/{tio}/{workflowid}")
@@ -54,6 +56,22 @@ public class LaunchController {
                                        @RequestParam(name = "reason")  String reason
                                                ) {
         return workflowConnect.cancelActivity(tioInstance, workflowid,runid,reason);
+    }
+
+    @GetMapping("/launch-loaded/{tio}/{count}") /* FOR LOADED WORKFLOW */
+    public Mono<ResponseEntity<String>> launchLoaded(@PathVariable("tio") String tioInstance,
+                                               @PathVariable("count") int count) {
+        return workflowConnect.launchLoadedWorkflow(tioInstance,count)
+                .map(l->
+                        l.entrySet().stream().
+                                map((emap)->
+                                        String.format("%s :: %s &nbsp;",
+                                                emap.getKey(),emap.getValue()))
+                                .collect(Collectors.joining("<br>")))
+                .map(content->
+                        ResponseEntity.accepted().contentType(MediaType.TEXT_HTML)
+                                .body(String.format(responseContentTemplate,content)));
+
     }
 
 }

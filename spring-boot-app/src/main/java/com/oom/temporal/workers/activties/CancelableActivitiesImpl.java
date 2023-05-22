@@ -1,4 +1,4 @@
-package com.oom.temporal.baremin.activties;
+package com.oom.temporal.workers.activties;
 
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Random;
 
 @Slf4j
-public class SimpleActivitiesImpl implements SimpleActivities {
+public class CancelableActivitiesImpl implements CancelableActivities {
     @Override
     @Timed(value = "simpleTaskFunction1.timer")
     @Counted(value = "simpleTaskFunction1.counter")

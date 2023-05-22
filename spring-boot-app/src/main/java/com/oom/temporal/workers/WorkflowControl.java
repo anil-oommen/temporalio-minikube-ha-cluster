@@ -1,10 +1,13 @@
-package com.oom.temporal.baremin;
+package com.oom.temporal.workers;
 
 import com.oom.temporal.config.TioConfig;
-import com.oom.temporal.baremin.activties.SimpleActivitiesImpl;
-import com.oom.temporal.baremin.workflow.SimpleWorkflow;
-import com.oom.temporal.baremin.workflow.SimpleWorkflowImpl;
+import com.oom.temporal.workers.activties.CancelableActivitiesImpl;
+import com.oom.temporal.workers.activties.LoadedActivitiesImpl;
+import com.oom.temporal.workers.workflow.CancelableWorkflow;
+import com.oom.temporal.workers.workflow.CancelableWorkflowImpl;
 import com.oom.temporal.config.TioInstance;
+import com.oom.temporal.workers.workflow.LoadedWorkflow;
+import com.oom.temporal.workers.workflow.LoadedWorkflowImpl;
 import com.uber.m3.tally.Scope;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
@@ -27,7 +30,7 @@ import java.util.function.Function;
 
 @Component
 @Slf4j
-public class SimpleWorkflowControl {
+public class WorkflowControl {
 
     @Autowired
     TioConfig tioConf;
@@ -76,13 +79,15 @@ public class SimpleWorkflowControl {
          * Workflow implementations must be known to the worker at runtime in
          * order to dispatch workflow tasks.
          */
-        worker.registerWorkflowImplementationTypes(SimpleWorkflowImpl.class);
+        worker.registerWorkflowImplementationTypes(CancelableWorkflowImpl.class);
+        worker.registerWorkflowImplementationTypes(LoadedWorkflowImpl.class);
 
         /*
          * Register our Activity Types with the Worker. Since Activities are stateless and thread-safe,
          * the Activity Type is a shared instance.
          */
-        worker.registerActivitiesImplementations(new SimpleActivitiesImpl());
+        worker.registerActivitiesImplementations(new CancelableActivitiesImpl());
+        worker.registerActivitiesImplementations(new LoadedActivitiesImpl());
 
         /*
          * Start all the workers registered for a specific task queue.
@@ -106,16 +111,16 @@ public class SimpleWorkflowControl {
     };
     public String cancelActivity(TioInstance tioInstance, String workflowId, String runId,String cancelReason){
         WorkflowClient client = funcWorkflowClientForStub.apply(tioInstance);
-        client.newWorkflowStub(SimpleWorkflow.class,workflowId,Optional.of(runId))
-                .signalCancelActivity(cancelReason);
+        client.newWorkflowStub(CancelableWorkflow.class,workflowId,Optional.of(runId))
+                .signalCancelPrimaryActivity(cancelReason);
         log.info("Cancel Activity Signal Sent:" + cancelReason);
         return "Cancel Activity Signal Reason:" + cancelReason;
     }
-    public Map.Entry<String,String> launchWorkflow(String inputId, TioInstance tioInstance){
+    public Map.Entry<String,String> launchCancellableWorkflow(String inputId, TioInstance tioInstance){
 
         WorkflowClient client = funcWorkflowClientForStub.apply(tioInstance);// WorkflowClient.newInstance(service,clientOptions);
 
-        var workflowId = String.format("SWF%s",inputId);
+        var workflowId = String.format("CWF%s",inputId);
         WorkflowOptions.Builder optBuilder = WorkflowOptions.newBuilder()
                 .setWorkflowId(workflowId)
                 .setTaskQueue(tioInstance.getTaskQueue());
@@ -124,11 +129,31 @@ public class SimpleWorkflowControl {
             optBuilder.setSearchAttributes(addSearchAttributes(inputId));
 
         // Create the workflow client stub. It is used to start our workflow execution.
-        SimpleWorkflow workflow = client.newWorkflowStub(SimpleWorkflow.class, optBuilder.build());
+        CancelableWorkflow workflow = client.newWorkflowStub(CancelableWorkflow.class, optBuilder.build());
 
-        CompletableFuture<String> futureResult = WorkflowClient.execute(workflow::runWorkflow, inputId);
+        CompletableFuture<String> futureResult = WorkflowClient.execute(workflow::runPrimaryWorkflow, inputId);
         return Map.entry(workflowId,WorkflowStub.fromTyped(workflow).getExecution().getRunId());
     }
+
+    public Map.Entry<String,String> launchLoadedWorkflow(String inputId, TioInstance tioInstance){
+
+        WorkflowClient client = funcWorkflowClientForStub.apply(tioInstance);// WorkflowClient.newInstance(service,clientOptions);
+
+        var workflowId = String.format("LWF%s",inputId);
+        WorkflowOptions.Builder optBuilder = WorkflowOptions.newBuilder()
+                .setWorkflowId(workflowId)
+                .setTaskQueue(tioInstance.getTaskQueue());
+
+        if(tioInstance.isUseSearchAttribute())
+            optBuilder.setSearchAttributes(addSearchAttributes(inputId));
+
+        // Create the workflow client stub. It is used to start our workflow execution.
+        LoadedWorkflow workflow = client.newWorkflowStub(LoadedWorkflow.class, optBuilder.build());
+
+        CompletableFuture<String> futureResult = WorkflowClient.execute(workflow::runLoadedWorkflow, inputId);
+        return Map.entry(workflowId,WorkflowStub.fromTyped(workflow).getExecution().getRunId());
+    }
+
 
     private Map<String, String> addSearchAttributes(String appReference) {
         Map<String, String> searchAttributes = new HashMap<>();

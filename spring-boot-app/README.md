@@ -2,7 +2,8 @@
 
 ## Local Development
  * use Local Temporallite.
- * [Launch Workflow](http://localhost:8081/temporal/launch/tio1/1)
+ * [Launch Cancellable Workflow](http://localhost:8081/temporal/launch-cancellable/tio1/1)
+ * [Launch Loaded Workflow](http://localhost:8081/temporal/launch-loaded/tio1/1)
 ```shell
 temporalite.exe start -namespace fastns
 ```
@@ -30,7 +31,8 @@ helm uninstall app
 cd ../minikube-deploy/bin
 sh  access-spring-boot-app.sh.sh
 ```
-- Launch Workflows : http://192.168.1.205:28080/temporal/launch/tio1/10
+- Launch Workflows : http://192.168.1.205:28080/temporal/launch-loaded/tio1/10
+- Launch Workflows : http://192.168.1.205:28080/temporal/launch-cancellable/tio1/10
 
 ### (Alternative Not using Minikube) Working just with Docker
 ```shell

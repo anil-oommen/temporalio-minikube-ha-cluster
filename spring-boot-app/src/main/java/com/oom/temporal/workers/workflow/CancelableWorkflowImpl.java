@@ -1,6 +1,6 @@
-package com.oom.temporal.baremin.workflow;
+package com.oom.temporal.workers.workflow;
 
-import com.oom.temporal.baremin.activties.SimpleActivities;
+import com.oom.temporal.workers.activties.CancelableActivities;
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
 import io.temporal.activity.ActivityCancellationType;
@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
-public class SimpleWorkflowImpl implements SimpleWorkflow {
+public class CancelableWorkflowImpl implements CancelableWorkflow {
 
     ActivityOptions options = ActivityOptions.newBuilder()
             /*Scenario 1 */
@@ -30,12 +30,12 @@ public class SimpleWorkflowImpl implements SimpleWorkflow {
                     .setMaximumInterval(Duration.ofSeconds(2))
                     .build())
             .build();
-    private final SimpleActivities activity = Workflow
-            .newActivityStub(SimpleActivities.class, options);
+    private final CancelableActivities activity = Workflow
+            .newActivityStub(CancelableActivities.class, options);
 
     private String cancellationRequest = null;
     @Override
-    public void signalCancelActivity(String reason){
+    public void signalCancelPrimaryActivity(String reason){
         cancellationRequest = reason;
     }
 
@@ -51,7 +51,7 @@ public class SimpleWorkflowImpl implements SimpleWorkflow {
     @Override
     @Timed(value = "runWorkflow.timer")
     @Counted(value = "runWorkflow.counter")
-    public String runWorkflow(String name) {
+    public String runPrimaryWorkflow(String name) {
         log.info("starting.Workflow:{}", name);
         var ret1 = activity.simpleTaskFunction1(name);
         final AtomicReference<Promise<String>> promiseLRA = new AtomicReference<>();
