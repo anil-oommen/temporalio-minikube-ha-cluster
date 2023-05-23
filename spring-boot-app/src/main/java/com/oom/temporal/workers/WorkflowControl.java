@@ -9,6 +9,7 @@ import com.oom.temporal.config.TioInstance;
 import com.oom.temporal.workers.workflow.LoadedWorkflow;
 import com.oom.temporal.workers.workflow.LoadedWorkflowImpl;
 import com.uber.m3.tally.Scope;
+import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowClientOptions;
 import io.temporal.client.WorkflowOptions;
@@ -131,8 +132,8 @@ public class WorkflowControl {
         // Create the workflow client stub. It is used to start our workflow execution.
         CancelableWorkflow workflow = client.newWorkflowStub(CancelableWorkflow.class, optBuilder.build());
 
-        CompletableFuture<String> futureResult = WorkflowClient.execute(workflow::runPrimaryWorkflow, inputId);
-        return Map.entry(workflowId,WorkflowStub.fromTyped(workflow).getExecution().getRunId());
+        WorkflowExecution workflowExecution = WorkflowClient.start(workflow::runPrimaryWorkflow, inputId);
+        return Map.entry(workflowId,workflowExecution.getRunId());
     }
 
     public Map.Entry<String,String> launchLoadedWorkflow(String inputId, TioInstance tioInstance){
@@ -150,8 +151,8 @@ public class WorkflowControl {
         // Create the workflow client stub. It is used to start our workflow execution.
         LoadedWorkflow workflow = client.newWorkflowStub(LoadedWorkflow.class, optBuilder.build());
 
-        CompletableFuture<String> futureResult = WorkflowClient.execute(workflow::runLoadedWorkflow, workflowId);
-        return Map.entry(workflowId,WorkflowStub.fromTyped(workflow).getExecution().getRunId());
+        WorkflowExecution workflowExecution = WorkflowClient.start(workflow::runLoadedWorkflow, workflowId);
+        return Map.entry(workflowId,workflowExecution.getRunId());
     }
 
 
