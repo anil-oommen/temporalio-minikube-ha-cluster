@@ -150,7 +150,7 @@ public class WorkflowControl {
         // Create the workflow client stub. It is used to start our workflow execution.
         LoadedWorkflow workflow = client.newWorkflowStub(LoadedWorkflow.class, optBuilder.build());
 
-        CompletableFuture<String> futureResult = WorkflowClient.execute(workflow::runLoadedWorkflow, inputId);
+        CompletableFuture<String> futureResult = WorkflowClient.execute(workflow::runLoadedWorkflow, workflowId);
         return Map.entry(workflowId,WorkflowStub.fromTyped(workflow).getExecution().getRunId());
     }
 

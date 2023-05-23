@@ -33,16 +33,16 @@ public class LoadedWorkflowImpl implements LoadedWorkflow {
 
     @Override
     public String runLoadedWorkflow(String name) {
-        activity.tasFunction01(null);
-        activity.tasFunction02(null);
-        activity.tasFunction03(null);
-        activity.tasFunction04(null);
-        activity.tasFunction05(null);
-        activity.tasFunction06(null);
-        activity.tasFunction07(null);
-        activity.tasFunction08(null);
-        activity.tasFunction09(null);
-        activity.tasFunction10(null);
-        return null;
+        activity.tasFunction01(name);
+        activity.tasFunction02(name);
+        activity.tasFunction03(name);
+        activity.tasFunction04(name);
+        activity.tasFunction05(name);
+        activity.tasFunction06(name);
+        activity.tasFunction07(name);
+        activity.tasFunction08(name);
+        activity.tasFunction09(name);
+        activity.tasFunction10(name);
+        return name;
     }
 }
