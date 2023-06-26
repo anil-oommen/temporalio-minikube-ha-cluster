@@ -1,8 +1,6 @@
 
-## Postgres Setup
-- Single Instance for all Clusters.
-- database & schema setup by temporal charts as needed. 
-- Source : [bitnami/postgres](https://github.com/bitnami/charts/tree/main/bitnami/postgresql/#installing-the-chart)
+## Cassandra Setup
+- As Independent Service, Helm Charts from https://artifacthub.io/packages/helm/bitnami/cassandra
 
 ```shell
 cd ../cass-helm
@@ -38,17 +36,18 @@ cqlsh -u cassandra -p $CASSANDRA_PASSWORD cass-cassandra
 
 ```
 
-## Install Cassandra Schema
+## Install Temporal Schema on Cassandra
 https://github.com/temporalio/helm-charts
 ```
 kubectl run --namespace default temporal-admin-tool --rm --tty -i --restart='Never' \
-   --image temporalio/admin-tools:1.20.1 -- bash
+   --image temporalio/admin-tools:1.20.1 -- /bin/bash
+   
 
 
 export CASSANDRA_HOST=cass-cassandra
 export CASSANDRA_PORT=9042
 export CASSANDRA_USER=cassandra
-export CASSANDRA_PASSWORD=cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS
+export CASSANDRA_PASSWORD=
 
 temporal-cassandra-tool create-Keyspace -k temporal
 CASSANDRA_KEYSPACE=temporal temporal-cassandra-tool setup-schema -v 0.0
