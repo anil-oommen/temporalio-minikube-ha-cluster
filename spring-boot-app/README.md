@@ -29,7 +29,7 @@ helm uninstall app
  Open Port Forwards 
 ```shell
 cd ../minikube-deploy/bin
-sh  access-spring-boot-app.sh.sh
+sh  access-spring-boot-app.sh
 ```
 - Launch Workflows : http://192.168.1.205:28080/temporal/launch-loaded/tio1/10
 - Launch Workflows : http://192.168.1.205:28080/temporal/launch-cancellable/tio1/10
@@ -50,3 +50,4 @@ docker load --input jib-image.tar
 ```shell
 git remote set-url origin git@github.com:anil-oommen/temporalio-minikube-ha-cluster.git
 ```
+

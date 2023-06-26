@@ -1,17 +1,31 @@
 ## Install & Setup Temporal Cluster
 
-### Deploy Cluster : **tio1**
+### (Option 1) Deploy Cluster with Postgres: **tio1-pg**
 ```shell
 cd tio1-helm
-helm install -f values-tio1.yaml --atomic --timeout 30m tio1 .
+helm install -f values-tio1-pg.yaml --atomic --timeout 30m tio1 .
 helm uninstall tio1
 
 # Other Commands
-helm install -f values-tio1.yaml --atomic --timeout 15m tio1 .
-helm install -f values-tio1.yaml --timeout 180s tio1 .
+helm install -f values-tio1-pg.yaml --atomic --timeout 15m tio1 .
+helm install -f values-tio1-pg.yaml --timeout 180s tio1 .
 helm upgrade tio1 .
 
 ```
+
+### (Option 1) Deploy Cluster with Cassandra: **tio1-cass**
+```shell
+cd tio1-helm
+helm install -f values-tio1-cass.yaml --atomic --timeout 30m tio1 .
+helm uninstall tio1
+
+# Other Commands
+helm install -f values-tio1-cass.yaml --atomic --timeout 15m tio1 .
+helm install -f values-tio1-cass.yaml --timeout 180s tio1 .
+helm upgrade tio1 .
+
+```
+
 
 ### Startup the KubeCtl port-forwards for Temporal
 ```shell
@@ -60,4 +74,7 @@ sh access-prometheus.sh
 ./bin/tctl --address 192.168.1.205:15233 --namespace fastns workflow listarchived -ps="20" -q "StartTime = '2023-01-31T00:00:00Z' AND SearchPrecision='Day' AND WorkflowType='NNNN'"
 ```
 
-
+# 
+```
+./bin/tctl --address 192.168.1.205:15233 --namespace fastns  wf desc
+```

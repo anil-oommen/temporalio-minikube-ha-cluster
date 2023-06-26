@@ -19,11 +19,12 @@ sources:
   - https://github.com/temporalio/temporal
 
 dependencies:
-  - name: cassandra
-    version: "0.14.3"
-    repository: https://charts.helm.sh/incubator
-    enabled: false
-    condition: cassandra.enabled
+#  - name: cassandra
+#    version: "0.14.3"
+#    # repository: https://charts.helm.sh/incubator
+#    repository: file://../cass-helm
+#    enabled: false
+#    condition: cassandra.enabled
 #  #### Using Custom Prometheus 
   - name: prometheus
     repository: https://prometheus-community.github.io/helm-charts

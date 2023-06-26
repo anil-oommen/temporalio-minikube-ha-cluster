@@ -1,6 +1,6 @@
 
 ## Minikube Startup
-### Minikube Single Node
+### Minikube Single Node (currently not setup to use with PVs.)
 ```shell
 minikube start --memory 8192 --cpus 4
 

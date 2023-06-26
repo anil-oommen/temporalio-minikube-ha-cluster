@@ -69,6 +69,41 @@ spec:
       storage: 2Gi
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: cs-persistent-volume
+  labels:
+    app.kubernetes.io/source: "minikube-setup-resources.yaml"
+    app.kubernetes.io/instance: cs
+    app.kubernetes.io/name: "cassandra-pv"
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/host/pv-cassandra-data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cs-persistent-volume-claim
+  labels:
+    app.kubernetes.io/source: "minikube-setup-resources.yaml"
+    app.kubernetes.io/instance: cs
+    app.kubernetes.io/name: "cassandra-pv"
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
 kind: Secret
 metadata:
   name: single-use-dev-secrets
@@ -76,3 +111,4 @@ type: Opaque
 data:
   #Base64 Encoded.
   postgres-password: "Y0dGemMzZHZjbVJtYjNKQlF6Z3lOakk0TVRNeFdGSlM="
+  cassandra-password: "Y0dGemMzZHZjbVJtYjNKQlF6Z3lOakk0TVRNeFdGSlM="

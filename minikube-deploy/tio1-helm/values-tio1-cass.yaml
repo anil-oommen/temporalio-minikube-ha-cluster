@@ -1,0 +1,129 @@
+# debug: true
+server:
+  dynamicConfig:
+    matching.numTaskqueueReadPartitions:
+    - value: 10
+      constraints: {}
+    matching.numTaskqueueWritePartitions:
+    - value: 10
+      constraints: {}
+  config:
+    logLevel: "debug,info"
+    numHistoryShards: 512
+    persistence:
+      default:
+        driver: "cassandra"
+
+        cassandra:
+          hosts: ["cass-cassandra.default.svc.cluster.local"]
+          port: 9042
+          keyspace: temporal
+          user: cassandra
+          password: cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS
+          schemaDir: schema/cassandra/temporal/versioned
+          replicationFactor: 1
+          consistency:
+            default:
+              consistency: "local_quorum"
+              serialConsistency: "local_serial"
+
+      visibility:
+        driver: "cassandra"
+
+        cassandra:
+          hosts: ["cass-cassandra.default.svc.cluster.local"]
+          port: 9042
+          keyspace: temporal_visibility
+          user: cassandra
+          password: cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS
+          schemaDir: schema/cassandra/visibility/versioned
+          replicationFactor: 1
+          consistency:
+            default:
+              consistency: "local_quorum"
+              serialConsistency: "local_serial"
+
+  archival:
+    history:
+      state: "enabled"
+      enableRead: true
+      provider: 
+        filestore:
+          fileMode: "0666"
+          dirMode: "0766"
+    visibility:
+      state: "enabled"
+      enableRead: true
+      provider:
+        filestore:
+          fileMode: "0666"
+          dirMode: "0766"
+  namespaceDefaults:
+    archival:
+      history:
+        state: "enabled"
+        URI: "file:///tmp/temporal_archival/development"
+      visibility:
+        state: "enabled"
+        URI: "file:///tmp/temporal_vis_archival/development"
+
+
+
+cassandra:
+  enabled: false
+  # not deteted external: true
+
+mysql:
+  enabled: false
+
+postgresql:
+  enabled: false
+
+# Using Custom Prometheus refer My README
+prometheus:
+  enabled: false
+
+grafana:
+  enabled: true
+
+  
+elasticsearch:
+  enabled: true
+# Stick to 1 , node affinity not spread is still an issue
+  replicas: 1
+# determins if es-index-setup is pre or post install.
+  external: false
+  host: "elasticsearch-master"
+  # if using existing, set 
+  # external: true
+  # host: "es-elasticsearch-master"
+  port: "9200"
+  version: "v7"
+  scheme: "http"
+  logLevel: "error"
+disabledelasticsearch:
+  enabled: true
+  replicas: 3
+  persistence:
+    enabled: false
+  imageTag: 7.17.3
+  host: elasticsearch-master-headless
+  scheme: http
+  port: 9200
+  version: "v7"
+  logLevel: "error"
+  username: ""
+  password: ""
+  visibilityIndex: "temporal_visibility_v1_dev"
+
+web:
+  enabled: true
+
+# Canges need to add env for Postgres in server-job.yaml
+schema:
+  setup:
+    enabled: true
+#    backoffLimit: 10
+  update:
+    enabled: true
+#    backoffLimit: 10
