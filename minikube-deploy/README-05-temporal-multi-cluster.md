@@ -41,12 +41,12 @@ sh access-prometheus.sh
  - To check archives : temporal-history-pod : /tmp/temporal_archival/development
 ```shell
 # namespace 'fastns' with archive after 1 Day.
-./bin/tctl --address 192.168.1.205:15233 --namespace fastns namespace register --global_namespace false --retention 1 --history_archival_state enabled
-./bin/tctl --address 192.168.1.205:15233 --namespace fastns namespace update -vas enabled
+./tctl --address 192.168.1.205:15233 --namespace fastns namespace register --global_namespace false --retention 1 --history_archival_state enabled
+./tctl --address 192.168.1.205:15233 --namespace fastns namespace update -vas enabled
 
 # namespace others.
-./bin/tctl --address 192.168.1.205:15233 --namespace default namespace register
-./bin/tctl --address 192.168.1.205:15233 --namespace basic namespace register
+./tctl --address 192.168.1.205:15233 --namespace default namespace register
+./tctl --address 192.168.1.205:15233 --namespace basic namespace register
 # namespace help
 ./bin/tctl namespace register --gd 
 ```

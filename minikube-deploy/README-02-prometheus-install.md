@@ -8,7 +8,7 @@
 helm repo add prometheus-repo https://prometheus-community.github.io/helm-charts
 helm search repo prometheus-repo
 ```
-
+ 
 ### Option 1 : install prometheus basic
 ```shell
 helm install pr prometheus-repo/prometheus -f values-prometheus-basic.yaml --atomic --timeout 180s 

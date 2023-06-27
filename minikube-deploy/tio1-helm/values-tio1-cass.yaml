@@ -100,7 +100,7 @@ elasticsearch:
   port: "9200"
   version: "v7"
   scheme: "http"
-  logLevel: "error"
+  logLevel: "info"
 disabledelasticsearch:
   enabled: true
   replicas: 3
