@@ -16,6 +16,7 @@ helm upgrade tio1 .
 ### (Option 1) Deploy Cluster with Cassandra: **tio1-cass**
 ```shell
 cd tio1-helm
+helm template -f values-tio1-cass.yaml . > out.yaml
 helm install -f values-tio1-cass.yaml --atomic --timeout 30m tio1 .
 helm uninstall tio1
 
