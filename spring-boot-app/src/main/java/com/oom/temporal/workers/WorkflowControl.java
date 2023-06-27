@@ -10,10 +10,7 @@ import com.oom.temporal.workers.workflow.LoadedWorkflow;
 import com.oom.temporal.workers.workflow.LoadedWorkflowImpl;
 import com.uber.m3.tally.Scope;
 import io.temporal.api.common.v1.WorkflowExecution;
-import io.temporal.client.WorkflowClient;
-import io.temporal.client.WorkflowClientOptions;
-import io.temporal.client.WorkflowOptions;
-import io.temporal.client.WorkflowStub;
+import io.temporal.client.*;
 import io.temporal.serviceclient.WorkflowServiceStubs;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 import io.temporal.worker.Worker;
@@ -150,9 +147,14 @@ public class WorkflowControl {
 
         // Create the workflow client stub. It is used to start our workflow execution.
         LoadedWorkflow workflow = client.newWorkflowStub(LoadedWorkflow.class, optBuilder.build());
+        try {
+            WorkflowExecution workflowExecution = WorkflowClient.start(workflow::runLoadedWorkflow, workflowId);
+            return Map.entry(workflowId,workflowExecution.getRunId());
+        }catch (WorkflowExecutionAlreadyStarted workflowExecutionAlreadyStarted){
+            log.warn("Workflow is already Running {}",workflowId);
+            return Map.entry(workflowId,"WorkflowExecutionAlreadyStarted");
+        }
 
-        WorkflowExecution workflowExecution = WorkflowClient.start(workflow::runLoadedWorkflow, workflowId);
-        return Map.entry(workflowId,workflowExecution.getRunId());
     }
 
 

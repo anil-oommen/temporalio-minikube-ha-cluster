@@ -46,7 +46,7 @@ public class WorkflowConnect {
                         .map(tid->{
                             return Optional.ofNullable(tioConfig.getTemporal().get(tioInstance))
                                     .map(tio-> workflowControl.launchLoadedWorkflow(tid,tio))
-                                    .orElseThrow(()->new RuntimeException(("Error Tio Instance not Found!")));
+                                    .orElseThrow(()->new RuntimeException(("Error Tio Instance not Found, or could not launch any workflows.")));
                         })
                         .collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue)));
 
