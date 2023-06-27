@@ -21,7 +21,7 @@ extraScrapeConfigs: |
     kubernetes_sd_configs:
       - role: pod
     metrics_path: /actuator/prometheus
-  - job_name: 'prometheus-benchmark-pods'
+  - job_name: 'benchmark-monitoring'
     honor_labels: true
     kubernetes_sd_configs:
       - role: pod
