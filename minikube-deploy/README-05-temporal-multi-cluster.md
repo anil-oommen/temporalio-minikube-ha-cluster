@@ -52,8 +52,8 @@ sh access-prometheus.sh
 ```
 ### Add Custom Search Attributes 'AppReference'
 ```shell
-./bin/tctl --address 192.168.1.205:15233 --namespace fastns cluster get-search-attributes
-./bin/tctl --address 192.168.1.205:15233 --namespace fastns --auto_confirm admin cluster add-search-attributes --name AppReference --type Keyword
+./tctl --address 192.168.1.205:15233 --namespace fastns cluster get-search-attributes
+./tctl --address 192.168.1.205:15233 --namespace fastns --auto_confirm admin cluster add-search-attributes --name AppReference --type Keyword
 
 # to verify 
 ./bin/tctl --address 192.168.1.205:15233 --namespace fastns workflow show --wid SWF008

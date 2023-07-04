@@ -52,4 +52,19 @@ History Service Dashboards > Workflow Task Insight | Workflow Task Breakdown
  - ```temporal_workflow_active_thread_count{job="prometheus-spring-pods"}```
  - Guage ```temporal_activity_schedule_to_start_latency_seconds_max{profile="kbe"}```
 
- 
+ ### Synthetics Tests with Benchmark Worker 
+ #### 4 July 2024 Comparing Postgres vs Cassandra on MiniKube
+
+```shell
+08:53 - 09:47 : Postgres (Run 1) , 512 Shard , benchmark-worker 5, soak-test 1 (CONCURRENT_WORKFLOWS=10000), Workflows Created 100,000 
+09:50 - 10:40 : Postgres (Run 2) , 512 Shard , benchmark-worker 10, soak-test 1 (CONCURRENT_WORKFLOWS=10000), Workflows Created 100,000 
+
+11:45 - 13:38 : Cassandra (Run 1) - Discarded System Crash , 512 Shard , benchmark-worker 10, soak-test 1 (CONCURRENT_WORKFLOWS=10000), Workflows Created 100,000 
+
+13:42 - 14:19 : Cassandra (Run 2) - Discarded System Crash , 512 Shard , benchmark-worker 10, soak-test 1 (CONCURRENT_WORKFLOWS=10000), Workflows Created 100,000 
+```
+
+https://snapshots.raintank.io/dashboard/snapshot/E96QvATu82P2Heim7IlPQOIQuagBIyNw 
+https://snapshots.raintank.io/dashboard/snapshot/JDIBs9hJT7hIcSNCW4AL3af54UPaL3PF 
+https://snapshots.raintank.io/dashboard/snapshot/cgiK5gEphrwf979xV87hmn53MsxLSIEn 
+https://snapshots.raintank.io/dashboard/snapshot/MD3eONuXof0NG73LfJhFiyarPy7NomWb 

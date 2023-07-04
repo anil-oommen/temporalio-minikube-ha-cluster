@@ -3,7 +3,7 @@
  - https://github.com/temporalio/benchmark-matrix/tree/rh-series-2/k8s/monitoring/dashboards
 
 
-## Run with Deployment : Kubectl
+## (OPTION 1) Run with Deployment : Kubectl
 ```shell
 cd soak-test-kbe
 kubectl apply -f deploy-kbe.yaml 
@@ -14,9 +14,50 @@ kubectl port-forward --address 0.0.0.0 svc/svc-benchmark-workers 28081:8081 -n d
 kubectl delete -f deploy-kbe.yaml 
 ```
 
+### Env Details verify.
+```
+export TEMPORAL_CLI_ADDRESS=localhost:15233
+export TEMPORAL_CLI_NAMESPACE=default
+./tctl admin cluster describe
+shards 512 
+./tctl taskqueue list-partition --taskqueue default
+10
+./tctl workflow count --query 'ExecutionStatus="Running"'
+./tctl workflow count --query 'ExecutionStatus="Completed"'
+
+------- Postgres 
+worker - 5 replicas. Transtion / sec : 840, CPU 7 , 
+------- Cassandra
+1 instance, using 3.36 CPU  
 
 
-## Run Manually : Start Workers Instance.
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## (OPTION 2) Run Manually : Start Workers Instance.
 
 
 ```shell

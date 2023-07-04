@@ -6,7 +6,7 @@ metadata:
     component: workers
   name: benchmark-workers
 spec:
-  replicas: 1
+  replicas: 10
   selector:
     matchLabels:
       app: benchmark
@@ -60,7 +60,7 @@ metadata:
     component: soak-test
   name: benchmark-soak-test
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: benchmark
@@ -83,6 +83,6 @@ spec:
         - name: TEMPORAL_TASK_QUEUE
           value: "benchmark"
         - name: CONCURRENT_WORKFLOWS
-          value: "10"
+          value: "10000"
         command: ["runner", "-w", "-c", "$(CONCURRENT_WORKFLOWS)", "-t", "ExecuteActivity", '{ "Count": 3, "Activity": "Echo", "Input": { "Message": "test" } }']
       restartPolicy: Always
