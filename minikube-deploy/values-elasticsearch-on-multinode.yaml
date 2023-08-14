@@ -2,7 +2,11 @@ clusterName: "es-elasticsearch"
 replicas: 1
 # imageTag: 7.17.3
 minimumMasterNodes: 1
-# antiAffinity: "soft"
+
+# Removed Hard Affinity Rules
+# refer https://github.com/elastic/helm-charts/tree/main/elasticsearch
+# does not work seems primary and replicas cannot run on same node !!
+antiAffinity: "soft"
 nodeSelector:
     kubernetes.io/os: linux
 service:
@@ -10,7 +14,7 @@ service:
 
 #protocol: http
 persistence:
-  enabled: false
+  enabled: true
 
 secret:
   enabled: true

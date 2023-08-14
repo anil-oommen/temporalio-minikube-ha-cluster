@@ -18,6 +18,7 @@ helm upgrade tio1 .
 cd tio1-helm
 helm template -f values-tio1-cass.yaml . > out.yaml
 helm install -f values-tio1-cass.yaml --atomic --timeout 30m tio1 .
+helm upgrade -f values-tio1-cass.yaml --atomic --timeout 30m tio1 .
 helm uninstall tio1
 
 # Other Commands

@@ -313,7 +313,9 @@ resources:
   ##    cpu: 2
   ##    memory: 4Gi
   ##
-  limits: {}
+  limits: 
+    cpu: 1
+    memory: 1Gi
   ## Examples:
   ## requests:
   ##    cpu: 2

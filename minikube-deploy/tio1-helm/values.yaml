@@ -178,7 +178,7 @@ server:
     affinity: {}
 
   history:
-    # replicaCount: 1
+    replicaCount: 1
     service:
       # type: ClusterIP
       port: 7234

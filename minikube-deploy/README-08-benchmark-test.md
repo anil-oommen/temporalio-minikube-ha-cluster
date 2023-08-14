@@ -24,12 +24,15 @@ shards 512
 10
 ./tctl workflow count --query 'ExecutionStatus="Running"'
 ./tctl workflow count --query 'ExecutionStatus="Completed"'
+./tctl workflow count --query 'ExecutionStatus="Running" or ExecutionStatus="Completed"'
 
 ------- Postgres 
 worker - 5 replicas. Transtion / sec : 840, CPU 7 , 
 ------- Cassandra
-1 instance, using 3.36 CPU  
-
+worker - 5 replicas. 
+Total CPU 6.41 Code 
+cassandra 1 instance, using 3.36 CPU  
+history 1 instance , using 1.53 CPU 
 
 
 ```

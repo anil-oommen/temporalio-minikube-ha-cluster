@@ -1,11 +1,37 @@
 
 ## Cassandra Setup
-- As Independent Service, Helm Charts from https://artifacthub.io/packages/helm/bitnami/cassandra
+ - As Independent Service, Helm Charts from https://artifacthub.io/packages/helm/bitnami/cassandra
+ - https://github.com/bitnami/charts/tree/main/bitnami/cassandra
+ - https://pwittrock.github.io/docs/tutorials/stateful-application/cassandra/
+ - https://artifacthub.io/packages/helm/bitnami/cassandra
 
 ```shell
 cd ../cass-helm
 helm install -f values-cass.yaml --atomic --timeout 30m cass .
+helm install -f values-cass.yaml --atomic --timeout 30m --set debug.enabled=true,image.debug=true cass .
+
+
 helm uninstall cass
+
+## Helm Commands
+helm upgrade -f values-cass.yaml --atomic --timeout 30m cass .
+helm upgrade --dry-run -f values-cass.yaml --atomic --timeout 30m cass .
+
+
+
+helm plugin install https://github.com/databus23/helm-diff
+helm history cass
+
+# get diffs 
+helm diff upgrade -f values-cass.yaml cass .
+helm diff revision cass 1 2
+
+# without Helm
+kubectl scale statefulset cass-cassandra --replicas=5
+
+
+kubectl cordon kb8uk-m02
+kubectl drain kb8uk-m02
 
 ```
 ####  
@@ -56,5 +82,15 @@ CASSANDRA_KEYSPACE=temporal temporal-cassandra-tool update -schema-dir schema/ca
 temporal-cassandra-tool create-Keyspace -k temporal_visibility
 CASSANDRA_KEYSPACE=temporal_visibility temporal-cassandra-tool setup-schema -v 0.0
 CASSANDRA_KEYSPACE=temporal_visibility temporal-cassandra-tool update -schema-dir schema/cassandra/visibility/versioned
+
+```
+
+## Cassandra Common Commands
+```
+# List KeySpace and tables.
+DESCRIBE KEYSPACE temporal_visibility;
+DESCRIBE KEYSPACE temporal;
+
+
 
 ```

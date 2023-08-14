@@ -61,7 +61,7 @@ History Service Dashboards > Workflow Task Insight | Workflow Task Breakdown
 
 11:45 - 13:38 : Cassandra (Run 1) - Discarded System Crash , 512 Shard , benchmark-worker 10, soak-test 1 (CONCURRENT_WORKFLOWS=10000), Workflows Created 100,000 
 
-13:42 - 14:19 : Cassandra (Run 2) - Discarded System Crash , 512 Shard , benchmark-worker 10, soak-test 1 (CONCURRENT_WORKFLOWS=10000), Workflows Created 100,000 
+13:42 - 14:19 : Cassandra (Run 2) , 512 Shard , benchmark-worker 10, soak-test 1 (CONCURRENT_WORKFLOWS=10000), Workflows Created 100,000 
 ```
 
 https://snapshots.raintank.io/dashboard/snapshot/E96QvATu82P2Heim7IlPQOIQuagBIyNw 

@@ -21,7 +21,7 @@ server:
           user: cassandra
           password: cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS
           schemaDir: schema/cassandra/temporal/versioned
-          replicationFactor: 1
+          replicationFactor: 3
           consistency:
             default:
               consistency: "local_quorum"
@@ -37,7 +37,7 @@ server:
           user: cassandra
           password: cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS
           schemaDir: schema/cassandra/visibility/versioned
-          replicationFactor: 1
+          replicationFactor: 3
           consistency:
             default:
               consistency: "local_quorum"
