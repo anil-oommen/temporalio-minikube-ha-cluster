@@ -5,8 +5,23 @@
  - https://pwittrock.github.io/docs/tutorials/stateful-application/cassandra/
  - https://artifacthub.io/packages/helm/bitnami/cassandra
 
-```shell
+```bash
 cd ../cass-helm
+
+# init , skaffold installed with gcloud.
+skaffold config set --global local-cluster true
+skaffold init --skip-build
+
+```
+
+#### Skaffold , Over Helm and Port-Forward
+ Under Development.
+skaffold dev
+
+#### Using Helm 
+
+```shell
+
 helm install -f values-cass.yaml --atomic --timeout 30m cass .
 helm install -f values-cass.yaml --atomic --timeout 30m --set debug.enabled=true,image.debug=true cass .
 
@@ -34,7 +49,9 @@ kubectl cordon kb8uk-m02
 kubectl drain kb8uk-m02
 
 ```
-####  
+ 
+
+
 
 
 ### IMPORTANT Password stored in Persistant Volume, so have to delete if you are recreating cluster

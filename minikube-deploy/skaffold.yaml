@@ -1,0 +1,44 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: Temporal-Helm
+manifests:
+  rawYaml:
+  - ./minikube-setup-resources.yaml
+
+profiles:
+  - name: setup-resources
+    deploy:
+      kubectl:
+        flags: 
+          apply: 
+          - -fminikube-setup-resources.yaml
+  - name: cassandra
+    deploy: 
+      helm:
+        releases:
+          - name: cassandra
+            chartPath: cass-helm/.
+            valuesFiles:
+              - cass-helm/values.yaml
+            version: 10.4.2
+    portForward:
+    - resourceType: service
+      resourceName: cassandra
+      namespace: default
+      port: 9042
+      localPort: 9042
+  - name: prometheus
+    deploy: 
+      helm:
+        releases:
+          - name: pr
+            remoteChart: prometheus-repo/prometheus
+            valuesFiles:
+              - values-prometheus-basic.yaml
+    portForward:
+    - resourceType: service
+      resourceName: pr-prometheus-server
+      namespace: default
+      port: 80
+      localPort: 18080
