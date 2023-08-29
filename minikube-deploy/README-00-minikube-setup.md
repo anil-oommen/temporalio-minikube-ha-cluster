@@ -104,30 +104,3 @@ kubectl run --namespace default shellbox --rm --tty -i --restart='Never' \
  kubectl exec --stdin --tty shellbox -- /bin/bash
 
 ```
-
-```
-kubectl get certificates --all-namespaces
-kubectl describe certificate  general-cert -n default
-```
-
-```
- # Check Elastic Search Indexes available
-curl -v --insecure --user elastic:123456 https://es-elasticsearch-master:9200/
-
-
-curl -v --insecure --user elastic:123456 https://es-elasticsearch-master:9200/_cluster/health?wait_for_status=green&timeout=1s
-
-# Check Cert
-curl -vvI https://es-elasticsearch-master:9200
-openssl s_client -connect es-elasticsearch-master:9200 </dev/null 2>/dev/null | openssl x509 -inform pem -text
-openssl x509 -in tls.crt -text -noout
-
-# Verify Cert without Trusting CA
-openssl verify tls.crt
-# Verify Cert Providing CA
-openssl verify -CAfile ca.crt tls.crt
-openssl verify -CAfile ../ca-keystore/ca.crt tls.crt
-
-https://www.sslshopper.com/article-most-common-openssl-commands.html
-
-```

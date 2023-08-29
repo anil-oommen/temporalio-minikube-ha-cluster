@@ -22,7 +22,42 @@ skaffold dev --filename='skaffold-certmanager.yaml'
 kubectl describe certificate cert-selfsigned-general -n default
 # secret generated 'cert-selfsigned-general-secret' , with jks and pkcs12
 
+# Dev and Verification Commands
+kubectl get certificates --all-namespaces
+kubectl describe certificate  general-cert -n cert-manager
+# if not ' The certificate has been successfully issued' then still in progress.
 ```
+
+## Utility Container
+```
+# Commands from Utility, to diagnize the certificate.
+# for Containers with Volume Mount.
+ kubectl apply -f minikube-utility-shell.yaml
+ kubectl exec --stdin --tty shellbox -- /bin/bash
+ cd /etc/options/...
+
+ # https://www.sslshopper.com/article-most-common-openssl-commands.html
+ openssl x509 -in tls.crt -text -noout
+ # Verify Cert without Trusting CA
+ openssl verify tls.crt
+ # Verify Cert Providing CA
+ openssl verify -CAfile ca.crt tls.crt
+ openssl verify -CAfile ../ca-keystore/ca.crt tls.crt
+
+
+ curl -vvI https://es-elasticsearch-master:9200
+ openssl s_client -connect es-elasticsearch-master:9200 </dev/null 2>/dev/null | openssl x509 -inform pem -text
+```
+
+## Elastic Search Diagnositics
+```
+# Check Elastic Search Indexes available
+curl -v --insecure --user elastic:123456 https://es-elasticsearch-master:9200/
+
+
+curl -v --insecure --user elastic:123456 https://es-elasticsearch-master:9200/_cluster/health?wait_for_status=green&timeout=1s
+```
+
 
 #### Skaffold , Over Helm and Port-Forward
 
