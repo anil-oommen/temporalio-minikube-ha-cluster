@@ -1,0 +1,27 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: DeployTemporal
+deploy: 
+  helm:
+    releases:
+      - name: tio1
+        chartPath: tio1-helm/.
+        valuesFiles:
+          - tio1-helm/values-tio1-cass.yaml
+portForward:
+- resourceType: service
+  resourceName: tio1-temporal-frontend
+  namespace: default
+  port: 15233
+  localPort: 7233
+- resourceType: service
+  resourceName: tio1-temporal-web
+  namespace: default
+  port: 15092
+  localPort: 8080
+- resourceType: service
+  resourceName: tio1-temporal-grafana
+  namespace: default
+  port: 18081
+  localPort: 80

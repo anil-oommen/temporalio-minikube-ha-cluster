@@ -12,6 +12,11 @@ helm search repo elastic-repo
 helm show values elastic-repo/elasticsearch
 ```
 
+### Diagnostics 
+curl -v --insecure --user elastic:123456 https://127.0.0.1:9200/
+###
+
+
 ## Storage Classes if using Persistent Volume.
  - https://github.com/elastic/helm-charts/tree/main/elasticsearch/examples/minikube
 ```

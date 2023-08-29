@@ -1,0 +1,55 @@
+# Under Development 
+
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: CertManagerCRDS
+deploy: 
+  kubectl: {}
+manifests:
+  rawYaml: 
+    - 'https://github.com/cert-manager/cert-manager/releases/download/v1.12.3/cert-manager.crds.yaml'
+
+
+---
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: CertManager
+deploy: 
+  helm:
+    releases:
+      - name: cert-manager
+        remoteChart: jetstack/cert-manager
+#        version: v1.12.0
+        namespace: cert-manager
+        setValues:
+          prometheus.enabled: false
+          webhook.timeoutSeconds: 4
+          installCRDs: false
+
+---
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: TrustManager
+deploy: 
+  helm:
+    releases:
+      - name: trust-manager
+        remoteChart: jetstack/trust-manager
+        namespace: cert-manager
+
+
+---
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: AppCertificateResources
+deploy: 
+  kubectl:
+    flags:
+      disableValidation: false
+manifests:
+  rawYaml: 
+    - minikube-setup-certmanager.yaml

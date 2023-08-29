@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: shellbox
+spec:
+  containers:
+  - name: shellbox
+    image: google/cloud-sdk
+    command: ["sleep","60000"]
+    volumeMounts:
+    - name: keystore-certs
+      mountPath: /etc/config/keystore
+    - name: keystore-password
+      mountPath: /etc/config/password
+    - name: ca-keystore-certs
+      mountPath: /etc/config/ca-keystore
+  volumes:
+  - name: keystore-certs
+    secret:
+      secretName: general-cert-secret
+  - name: ca-keystore-certs
+    secret:
+      secretName: trust-manager-base-ca-secret
+  - name: keystore-password
+    secret:
+      secretName: cert-selfsigned-custom-secret

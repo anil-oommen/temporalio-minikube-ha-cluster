@@ -26,7 +26,7 @@ mkdir $HOME/Development/temporal.io/_kb8ukStorage/
 ## Default Working
 minikube start --nodes 1 --memory 12g --cpus 6 --mount --mount-string="$HOME/Development/temporal.io/_kb8ukStorage/:/mnt/host/" -p kb8uk
 
-## Static Decide on CPU and Memory for Nodes. MAX
+## Static Decide on CPU and Memory for Nodes. MAX , Issue using Skaffold
 minikube start --nodes 2 --memory max --cpus max --mount --mount-string="$HOME/Development/temporal.io/_kb8ukStorage/:/mnt/host/" -p kb8uk
 
 
@@ -54,6 +54,7 @@ minikube delete -p kb8uk
 
 ```
 ### Persistance Volume & Other Resources Setup.
+#### Added to Skaffold , so no longer required if usin Skaffold.
 ```shell
 
 kubectl apply -f ./minikube-setup-resources.yaml 
@@ -79,6 +80,11 @@ minikube status -p mknode
  minikube addons enable metrics-server -p kb8uk
 ```
 
+### Enable Registry (Optonal so far)
+```
+ minikube addons enable registry -p kb8uk
+```
+
 #### Cluster 2 : AP (Under Development)
  - Only One Profile can be accessed via dashboard on a single Machine!
  - kubectl need maintain multiple configs (kubectl config view)
@@ -87,13 +93,41 @@ minikube status -p mknode
 
 ## Utility 
 ```
+
+# for Simple, no volume mount.
 docker pull google/cloud-sdk
 kubectl run --namespace default shellbox --rm --tty -i --restart='Never' \
    --image google/cloud-sdk 
+
+# for Containers with Volume Mount.
+ kubectl apply -f minikube-utility-shell.yaml
+ kubectl exec --stdin --tty shellbox -- /bin/bash
+
 ```
 
 ```
- # Check Elastic Search Indexes available 
- curl http://es-elasticsearch-master:9200
- curl --user : http://es-elasticsearch-master:9200/temporal_visibility_v1_dev
+kubectl get certificates --all-namespaces
+kubectl describe certificate  general-cert -n default
+```
+
+```
+ # Check Elastic Search Indexes available
+curl -v --insecure --user elastic:123456 https://es-elasticsearch-master:9200/
+
+
+curl -v --insecure --user elastic:123456 https://es-elasticsearch-master:9200/_cluster/health?wait_for_status=green&timeout=1s
+
+# Check Cert
+curl -vvI https://es-elasticsearch-master:9200
+openssl s_client -connect es-elasticsearch-master:9200 </dev/null 2>/dev/null | openssl x509 -inform pem -text
+openssl x509 -in tls.crt -text -noout
+
+# Verify Cert without Trusting CA
+openssl verify tls.crt
+# Verify Cert Providing CA
+openssl verify -CAfile ca.crt tls.crt
+openssl verify -CAfile ../ca-keystore/ca.crt tls.crt
+
+https://www.sslshopper.com/article-most-common-openssl-commands.html
+
 ```

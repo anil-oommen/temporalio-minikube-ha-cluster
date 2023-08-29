@@ -98,9 +98,12 @@ elasticsearch:
   external: true
   host: "es-elasticsearch-master"
   port: "9200"
-  version: "v7"
-  scheme: "http"
+  version: "v8"
+  scheme: "https"
   logLevel: "info"
+  username: "elastic"
+  password: "123456"
+
 disabledelasticsearch:
   enabled: true
   replicas: 3

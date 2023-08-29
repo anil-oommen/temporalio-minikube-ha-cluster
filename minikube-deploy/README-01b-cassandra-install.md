@@ -8,16 +8,6 @@
 ```bash
 cd ../cass-helm
 
-# init , skaffold installed with gcloud.
-skaffold config set --global local-cluster true
-skaffold init --skip-build
-
-```
-
-#### Skaffold , Over Helm and Port-Forward
- Under Development.
-skaffold dev
-
 #### Using Helm 
 
 ```shell

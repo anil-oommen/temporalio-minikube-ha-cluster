@@ -1,0 +1,253 @@
+# My Custom Secrets 
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cert-selfsigned-custom-secret
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: custom-secure
+    app.kubernetes.io/source: minikube-setup-secure-certcrds.yaml
+  namespace: default
+type: Opaque
+data:
+  #Base64 Encoded.
+  password: "Y0dGemMzZHZjbVJtYjNKQlF6Z3lOakk0TVRNeFdGSlM="
+
+# ##############################################################################
+# A SelfSigned CA , Issuing Other Certificate
+# https://medium.com/geekculture/a-simple-ca-setup-with-kubernetes-cert-manager-bc8ccbd9c2
+
+
+
+#---
+#apiVersion: cert-manager.io/v1
+#kind: Issuer
+#metadata:
+#  name: cert-selfsigned-issuer
+#  namespace: default
+#spec:
+#  selfSigned: {}
+
+## ######################################################
+##   Certificate Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: trust-manager-selfsigned-issuer
+  namespace: default
+spec:
+  selfSigned: {}
+
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:  
+  name: ca-signed-cert-issuer
+  namespace: default
+spec:
+#  selfSigned: {}
+  ca:
+    secretName: trust-manager-base-ca-secret
+
+# Trust Root CA Certificate
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: trust-manager-base-ca
+  namespace: default
+spec:
+  isCA: true
+  commonName: trust-manager-base-ca
+  secretName: trust-manager-base-ca-secret
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: trust-manager-selfsigned-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+
+
+# #################################################################
+# 
+
+
+#---
+#apiVersion: cert-manager.io/v1
+#kind: Certificate
+#metadata:
+#  name: cert-selfsigned-example
+#  namespace: cert-manager-apps
+#spec:
+#  dnsNames:
+#    - example.com
+#  secretName: selfsigned-cert-tls
+#  issuerRef:
+#    name: cert-selfsigned-issuer
+
+#---
+#apiVersion: cert-manager.io/v1
+#kind: Certificate
+#metadata:
+#  name: cert-selfsigned-test-example
+#  namespace: default
+#spec:
+#  secretName: test-certificate-tls
+#  dnsNames:
+#  - test.example.com
+#  issuerRef:
+#    name: cert-selfsigned-issuer
+#    kind: ClusterIssuer
+#  privateKey:
+#    algorithm: RSA
+#    size: 2048
+
+
+
+
+
+# 1. General Certificate .
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: general-cert
+  namespace: default
+spec:
+  commonName: general-cert
+  isCA: false
+  secretName: general-cert-secret
+  secretTemplate:
+    annotations:
+      usedFor: minikube
+    labels:
+      app.kubernetes.io/name: general
+      app.kubernetes.io/group: temporal
+  duration: 24h # 1Year
+  renewBefore: 10h # 15d
+  subject:
+    organizations:
+      - general.local
+  dnsNames:
+  - general.local
+  issuerRef:
+    name: ca-signed-cert-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+  usages:
+    - server auth
+    - client auth
+  keystores:
+    jks:
+      create: true
+      passwordSecretRef: # Password used to encrypt the keystore
+        key: password
+        name: cert-selfsigned-custom-secret
+    pkcs12:
+      create: true
+      passwordSecretRef: # Password used to encrypt the keystore
+        key: password
+        name: cert-selfsigned-custom-secret
+
+# 2. ElasticSearch Certificate .
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: elasticsearch-cert
+  namespace: default
+spec:
+  secretName: elasticsearch-cert-secret
+  duration: 8760h # 1Year
+  renewBefore: 360h # 15d
+  subject:
+    organizations:
+      - elasticsearch.local
+    organizationalUnits:
+      - minikube
+  dnsNames:
+  - es-elasticsearch-master
+  - elasticsearch.local
+  issuerRef:
+    name: ca-signed-cert-issuer
+    kind: ClusterIssuer
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+  usages:
+    - server auth
+    - client auth
+  keystores:
+    jks:
+      create: true
+      passwordSecretRef: # Password used to encrypt the keystore
+        key: password
+        name: cert-selfsigned-custom-secret
+    pkcs12:
+      create: true
+      passwordSecretRef: # Password used to encrypt the keystore
+        key: password
+        name: cert-selfsigned-custom-secret
+    
+# 2. Cassandra Certificate .
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cassandra-cert
+  namespace: default
+spec:
+  secretName: cassandra-cert-secret
+  duration: 8760h # 1Year
+  renewBefore: 360h # 15d
+  subject:
+    organizations:
+      - cassandra.local
+    organizationalUnits:
+      - minikube
+  dnsNames:
+  - cassandra
+  issuerRef:
+    name: ca-signed-cert-issuer
+    kind: ClusterIssuer
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+  usages:
+    - server auth
+    - client auth
+  keystores:
+    jks:
+      create: true
+      passwordSecretRef: # Password used to encrypt the keystore
+        key: password
+        name: cert-selfsigned-custom-secret
+    pkcs12:
+      create: true
+      passwordSecretRef: # Password used to encrypt the keystore
+        key: password
+        name: cert-selfsigned-custom-secret
+
+
+#---
+#apiVersion: trust.cert-manager.io/v1alpha1
+#kind: Bundle
+#metadata:
+#  name: trust-bundle
+#spec:
+#  sources:
+#  - useDefaultCAs: true
+#  - secret:
+#      name: "trust-manager-base-ca-secret"
+#      key: "tls.crt"
+#  target:
+#    configMap:
+#      key: "trust-bundle.pem"
