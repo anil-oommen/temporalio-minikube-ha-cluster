@@ -8,9 +8,14 @@ skaffold init --skip-build
 
 ## Cert Manager
 #### https://cert-manager.io/docs/installation/helm/
+#### Sync Certs to other namespaces , use https://cert-manager.io/docs/tutorials/syncing-secrets-across-namespaces/
 ```
 helm repo add jetstack https://charts.jetstack.io
 helm search repo jetstack
+
+helm repo add emberstack https://emberstack.github.io/helm-charts
+helm search repo reflector
+-- see annotations added to secrets to copy to other namespace.
 ```
 
 ### Deploy CertManager and Application Cert CRDS.
@@ -26,6 +31,9 @@ kubectl describe certificate cert-selfsigned-general -n default
 kubectl get certificates --all-namespaces
 kubectl describe certificate  general-cert -n cert-manager
 # if not ' The certificate has been successfully issued' then still in progress.
+
+ kubectl get Issuers,ClusterIssuers,Certificates,CertificateRequests,Orders,Challenges --all-namespaces
+
 ```
 
 ## Utility Container
@@ -34,15 +42,16 @@ kubectl describe certificate  general-cert -n cert-manager
 # for Containers with Volume Mount.
  kubectl apply -f minikube-utility-shell.yaml
  kubectl exec --stdin --tty shellbox -- /bin/bash
- cd /etc/options/...
+
+ cd /etc/config/...
 
  # https://www.sslshopper.com/article-most-common-openssl-commands.html
  openssl x509 -in tls.crt -text -noout
  # Verify Cert without Trusting CA
  openssl verify tls.crt
  # Verify Cert Providing CA
- openssl verify -CAfile ca.crt tls.crt
- openssl verify -CAfile ../ca-keystore/ca.crt tls.crt
+ 
+ openssl verify -CAfile ca-keystore/ca.crt keystore/tls.crt
 
 
  curl -vvI https://es-elasticsearch-master:9200

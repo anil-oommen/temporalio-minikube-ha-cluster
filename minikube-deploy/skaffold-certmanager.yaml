@@ -40,6 +40,17 @@ deploy:
         remoteChart: jetstack/trust-manager
         namespace: cert-manager
 
+---
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: KubernetesReflector
+deploy: 
+  helm:
+    releases:
+      - name: reflector
+        remoteChart: emberstack/reflector
+#        namespace: cert-manager
 
 ---
 apiVersion: skaffold/v4beta6

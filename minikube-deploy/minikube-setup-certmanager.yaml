@@ -3,6 +3,12 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: cert-selfsigned-custom-secret
+  annotations:
+#     Refer https://cert-manager.io/docs/tutorials/syncing-secrets-across-namespaces/ 
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "default"
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "default"
   labels:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: custom-secure
@@ -42,7 +48,7 @@ spec:
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
-metadata:  
+metadata:
   name: ca-signed-cert-issuer
   namespace: cert-manager
 spec:
@@ -60,6 +66,16 @@ spec:
   isCA: true
   commonName: trust-manager-base-ca
   secretName: trust-manager-base-ca-secret
+  secretTemplate:
+    annotations:
+#     Refer https://cert-manager.io/docs/tutorials/syncing-secrets-across-namespaces/ 
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "default"
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "default"
+    labels:
+      app.kubernetes.io/name: ca
+      app.kubernetes.io/group: temporal
   privateKey:
     algorithm: ECDSA
     size: 256
@@ -117,11 +133,15 @@ metadata:
 spec:
   commonName: general-cert
   isCA: false
-# if the secret generated has a suffix its temporary and is expected to be moved over. 
+# if the secret generated has a suffix its temporary and something is blocked and need to be investigated, probably namespace acccess. 
   secretName: general-cert-secret
   secretTemplate:
     annotations:
-      usedFor: minikube
+#     Refer https://cert-manager.io/docs/tutorials/syncing-secrets-across-namespaces/ 
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "default"
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "default"
     labels:
       app.kubernetes.io/name: general
       app.kubernetes.io/group: temporal
@@ -161,11 +181,21 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: elasticsearch-cert
-  namespace: default
+  namespace: cert-manager
 spec:
   secretName: elasticsearch-cert-secret
   duration: 8760h # 1Year
   renewBefore: 360h # 15d
+  secretTemplate:
+    annotations:
+#     Refer https://cert-manager.io/docs/tutorials/syncing-secrets-across-namespaces/ 
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "default"
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "default"
+    labels:
+      app.kubernetes.io/name: general
+      app.kubernetes.io/group: temporal
   subject:
     organizations:
       - elasticsearch.local
@@ -202,11 +232,21 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: cassandra-cert
-  namespace: default
+  namespace: cert-manager
 spec:
   secretName: cassandra-cert-secret
   duration: 8760h # 1Year
   renewBefore: 360h # 15d
+  secretTemplate:
+    annotations:
+#     Refer https://cert-manager.io/docs/tutorials/syncing-secrets-across-namespaces/ 
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "default"
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "default"
+    labels:
+      app.kubernetes.io/name: general
+      app.kubernetes.io/group: temporal
   subject:
     organizations:
       - cassandra.local
@@ -236,7 +276,9 @@ spec:
         key: password
         name: cert-selfsigned-custom-secret
 
-
+### 
+# https://cert-manager.io/docs/projects/trust-manager/
+# consolidate all truststores as a bundle.
 #---
 #apiVersion: trust.cert-manager.io/v1alpha1
 #kind: Bundle
