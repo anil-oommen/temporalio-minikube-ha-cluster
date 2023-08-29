@@ -24,18 +24,6 @@ data:
 # https://medium.com/geekculture/a-simple-ca-setup-with-kubernetes-cert-manager-bc8ccbd9c2
 
 
-
-#---
-#apiVersion: cert-manager.io/v1
-#kind: Issuer
-#metadata:
-#  name: cert-selfsigned-issuer
-#  namespace: default
-#spec:
-#  selfSigned: {}
-
-## ######################################################
-##   Certificate Issuer
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -55,7 +43,7 @@ spec:
   ca:
     secretName: trust-manager-base-ca-secret
 
-# Trust Root CA Certificate
+# 0. Trust Root CA Certificate
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -83,44 +71,6 @@ spec:
     name: trust-manager-selfsigned-issuer
     kind: ClusterIssuer
     group: cert-manager.io
-
-
-# #################################################################
-# 
-
-
-#---
-#apiVersion: cert-manager.io/v1
-#kind: Certificate
-#metadata:
-#  name: cert-selfsigned-example
-#  namespace: cert-manager-apps
-#spec:
-#  dnsNames:
-#    - example.com
-#  secretName: selfsigned-cert-tls
-#  issuerRef:
-#    name: cert-selfsigned-issuer
-
-#---
-#apiVersion: cert-manager.io/v1
-#kind: Certificate
-#metadata:
-#  name: cert-selfsigned-test-example
-#  namespace: default
-#spec:
-#  secretName: test-certificate-tls
-#  dnsNames:
-#  - test.example.com
-#  issuerRef:
-#    name: cert-selfsigned-issuer
-#    kind: ClusterIssuer
-#  privateKey:
-#    algorithm: RSA
-#    size: 2048
-
-
-
 
 
 # 1. General Certificate .
