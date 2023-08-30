@@ -70,6 +70,12 @@ curl -v --insecure --user elastic:123456 https://es-elasticsearch-master:9200/
 
 
 curl -v --cacert /etc/config/ca-keystore/ca.crt --user elastic:123456 https://es-elasticsearch-master:9200/_cluster/health?wait_for_status=green&timeout=1s
+
+curl -v --insecure --user elastic:123456 https://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
+
+
+
+
 ```
 
 

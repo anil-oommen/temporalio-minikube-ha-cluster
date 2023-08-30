@@ -1,6 +1,13 @@
 ## Running Temporal Clusters on Minikube
  Evaluating a Setup for Temporal Kubernetes running on Minikube. 
 
+## Version Upgrade 1.21.5 Work in Progress
+ - Added CertManager and SelfSigned CA and Individual Certificates
+ - elastic-search setup for HTTPS & Secret
+ - TODO Job temporal-es-index-setup currently setup for --insecure curl needs to be changed to use CA Trusted. --cacert /etc/config/ca-keystore/ca.crt
+ - 
+
+
 ### Temporal Features & Setup being Evaluated.  
  - Archival Features with FileStore
  - Advanced visibility with ES & CustomSearch Attributes.

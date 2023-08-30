@@ -8,20 +8,23 @@ deploy:
       - name: tio
         chartPath: tio2-helm/.
         valuesFiles:
-          - tio2-helm/values-tio-cass.yaml
+          - values-temporal-on-minikube.yaml
 portForward:
 - resourceType: service
   resourceName: tio-temporal-frontend
   namespace: default
-  port: 15233
-  localPort: 7233
+  localPort: 15233
+  port: 7233
+  address: 0.0.0.0
 - resourceType: service
   resourceName: tio-temporal-web
   namespace: default
-  port: 15092
-  localPort: 8080
+  localPort: 15092
+  port: 8080
+  address: 0.0.0.0
 - resourceType: service
-  resourceName: tio-temporal-grafana
+  resourceName: tio-grafana
   namespace: default
-  port: 18081
-  localPort: 80
+  localPort: 18081
+  port: 80
+  address: 0.0.0.0

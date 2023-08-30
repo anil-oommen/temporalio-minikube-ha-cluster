@@ -5,6 +5,56 @@
  - https://pwittrock.github.io/docs/tutorials/stateful-application/cassandra/
  - https://artifacthub.io/packages/helm/bitnami/cassandra
 
+
+### Add Repo and check is available.
+```
+helm repo add bitnami-repo https://charts.bitnami.com/bitnami
+helm search repo cassandra
+```
+
+### Post Scaffold Deployment Check Client Access.
+```
+# Connecting with Cassandra Client.
+export CASSANDRA_PASSWORD=$(kubectl get secret --namespace "default" single-use-dev-secrets -o jsonpath="{.data.cassandra-password}" | base64 -d)
+
+kubectl run --namespace default cass-cassandra-client --rm --tty -i --restart='Never' \
+   --env CASSANDRA_PASSWORD=$CASSANDRA_PASSWORD \
+   --image docker.io/bitnami/cassandra:4.1.3-debian-11-r24 -- bash
+
+cqlsh -u cassandra -p $CASSANDRA_PASSWORD cass-cassandra
+
+```
+
+
+
+### Debugging Why temporal-schema-update would fail
+ - Mostly can fail with "400, Bad Request "resource_already_exists_exception","reason"
+ - current scripts on smart enough.
+ - if so use schema.setup.enabled.
+
+
+```
+kubectl run --namespace default tio-admin-client --rm --tty -i --restart='Never' \
+   --image temporalio/admin-tools:1.21.5 -- bash
+
+export CASSANDRA_HOST=cass-cassandra.default.svc.cluster.local
+export CASSANDRA_KEYSPACE=temporal
+export CASSANDRA_PASSWORD=cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS
+export CASSANDRA_PORT=9042
+export CASSANDRA_USER=cassandra
+
+temporal-cassandra-tool update-schema --schema-dir /etc/temporal/schema/cassandra/temporal/versioned
+
+
+```
+
+
+
+
+## ##################################################
+# OUTDATED DO NOT USE Only for reference
+
+
 ```bash
 cd ../cass-helm
 

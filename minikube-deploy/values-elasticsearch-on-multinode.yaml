@@ -1,3 +1,9 @@
+# ##################### #
+# Version Specific Config : 
+#   https://github.com/elastic/helm-charts/blob/7.17/elasticsearch/README.md
+#   https://github.com/elastic/helm-charts/blob/main/elasticsearch/README.md#configuration
+# 
+
 clusterName: "es-elasticsearch"
 replicas: 1
 # imageTag: 7.17.3
@@ -18,11 +24,19 @@ protocol: https
 persistence:
   enabled: true
 
+# Elastic Password/secret to access service.
 # CURL Authentication with --user elastic:123456 
+extraEnvs:
+  - name: ELASTIC_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: custom-environment-secret
+        key: ELASTIC_PASSWORD
+
 secret:
-  enabled: true  # cant set to false, throws readiness probe ELASTIC_PASSWORD missing.
-# password: "" 
-  password: "123456"
+  enabled: true   # cant set to false, throws readiness probe ELASTIC_PASSWORD missing.
+#  password: ""    # Used in Newer Version 8.x, empty generates a password
+#  password: "123456"
 
 esConfig:
   elasticsearch.yml: |

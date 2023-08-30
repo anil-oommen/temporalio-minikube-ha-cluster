@@ -1,0 +1,15 @@
+replicaCount: 2
+
+#persistence:
+#  enabled: true
+#  existingClaim: "cs-persistent-volume-claim"
+#  storageClass: "manual"
+#  size: 5Gi
+
+dbUser:
+  user: cassandra
+  forcePassword: false
+  existingSecret:
+    name: "single-use-dev-secrets"
+    keyMapping:
+      cassandra-password: cassandra-password

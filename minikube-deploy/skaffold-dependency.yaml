@@ -9,9 +9,24 @@ deploy:
 manifests:
   rawYaml: 
     - minikube-setup-resources.yaml
+
+
+---
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: DeployCassandra
+deploy: 
+  helm:
+    releases:
+      - name: cass
+        remoteChart: bitnami-repo/cassandra
+        version: 10.5.1 # Version
+        valuesFiles:
+          - values-cassandra-on-multinode.yaml
 portForward:
 - resourceType: service
-  resourceName: cassandra
+  resourceName: cass-cassandra
   namespace: default
   port: 9042
   localPort: 9042
@@ -26,16 +41,17 @@ deploy:
     releases:
       - name: es
         remoteChart: elastic-repo/elasticsearch
-        version: 8.5.1
+        version: 7.17.3
         valuesFiles:
           - values-elasticsearch-on-multinode.yaml
 portForward:
+# https://192.168.1.205:9200/
 - resourceType: service
   resourceName: es-elasticsearch-master
   namespace: default
   port: 9200
   localPort: 9200
-
+  address: 0.0.0.0
 ---
 apiVersion: skaffold/v4beta6
 kind: Config
@@ -55,22 +71,4 @@ portForward:
   port: 80
   localPort: 18080
 
----
-apiVersion: skaffold/v4beta6
-kind: Config
-metadata:
-  name: DeployCassandra
-deploy: 
-  helm:
-    releases:
-      - name: cassandra
-        chartPath: cass-helm/.
-        valuesFiles:
-          - cass-helm/values.yaml
-        version: 10.4.2
-portForward:
-- resourceType: service
-  resourceName: cassandra
-  namespace: default
-  port: 9042
-  localPort: 9042
+
