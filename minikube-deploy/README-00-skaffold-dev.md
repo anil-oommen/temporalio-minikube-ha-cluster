@@ -78,6 +78,10 @@ curl -v --cacert /etc/config/ca-keystore/ca.crt --user elastic:123456 https://es
 ```
 # All Dependencies
 skaffold dev --filename='skaffold-dependency.yaml'
+
+skaffold dev --filename='skaffold-temporal-io.yaml'
+
+
 ```
 
 ################################################################

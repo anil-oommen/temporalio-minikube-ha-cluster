@@ -1,0 +1,136 @@
+# debug: true
+server:
+  dynamicConfig:
+    matching.numTaskqueueReadPartitions:
+    - value: 10
+      constraints: {}
+    matching.numTaskqueueWritePartitions:
+    - value: 10
+      constraints: {}
+  config:
+    numHistoryShards: 512
+    persistence:
+      default:
+        driver: "sql"
+
+        sql:
+          driver: "postgres"
+          host: pg-postgresql
+          port: 5432
+          database: temporal01
+          user: postgres
+          password: cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS
+          schemaDir: schema/postgresql/v96/temporal/versioned
+          # for a production deployment use this instead of `password` and provision the secret beforehand e.g. with a sealed secret
+          # it has a single key called `password`
+          # existingSecret: temporal-default-store
+          maxConns: 20
+          maxConnLifetime: "1h"
+          # tls:
+          #  enabled: true
+          #  enableHostVerification: true
+          #  serverName: _HOST_ # this is strictly required when using serverless CRDB offerings
+
+      visibility:
+        driver: "sql"
+
+        sql:
+          driver: "postgres"
+          host: pg-postgresql
+          port: 5432
+          database: temporal01_visibility
+          user: postgres
+          password: cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS
+          schemaDir: schema/postgresql/v96/visibility/versioned
+          # for a production deployment use this instead of `password` and provision the secret beforehand e.g. with a sealed secret
+          # it has a single key called `password`
+          # existingSecret: temporal-visibility-store
+          maxConns: 20
+          maxConnLifetime: "1h"
+          # tls:
+          #  enabled: true
+          #  enableHostVerification: true
+          #  serverName: _HOST_ # this is strictly required when using serverless CRDB offerings
+  archival:
+    history:
+      state: "enabled"
+      enableRead: true
+      provider: 
+        filestore:
+          fileMode: "0666"
+          dirMode: "0766"
+    visibility:
+      state: "enabled"
+      enableRead: true
+      provider:
+        filestore:
+          fileMode: "0666"
+          dirMode: "0766"
+  namespaceDefaults:
+    archival:
+      history:
+        state: "enabled"
+        URI: "file:///tmp/temporal_archival/development"
+      visibility:
+        state: "enabled"
+        URI: "file:///tmp/temporal_vis_archival/development"
+
+
+
+cassandra:
+  enabled: false
+
+mysql:
+  enabled: false
+
+postgresql:
+  enabled: true
+
+# Using Custom Prometheus refer My README
+prometheus:
+  enabled: false
+
+grafana:
+  enabled: true
+  
+# use replicas based on number of minikube nodes. else will hang
+otherdisabledelasticsearch:
+  enabled: true
+  replicas: 1
+elasticsearch:
+  enabled: true
+# Stick to 1 , node affinity not spread is still an issue
+  replicas: 1
+# determins if es-index-setup is pre or post install.
+  external: false
+  host: "es-elasticsearch-master"
+  port: "9200"
+  version: "v7"
+  scheme: "http"
+  logLevel: "error"
+disabledelasticsearch:
+  enabled: true
+  replicas: 3
+  persistence:
+    enabled: false
+  imageTag: 7.17.3
+  host: elasticsearch-master-headless
+  scheme: http
+  port: 9200
+  version: "v7"
+  logLevel: "error"
+  username: ""
+  password: ""
+  visibilityIndex: "temporal_visibility_v1_dev"
+
+web:
+  enabled: true
+
+# Canges need to add env for Postgres in server-job.yaml
+schema:
+  setup:
+    enabled: true
+#    backoffLimit: 10
+  update:
+    enabled: false
+#    backoffLimit: 10
