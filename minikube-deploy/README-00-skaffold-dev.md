@@ -52,9 +52,14 @@ kubectl describe certificate  general-cert -n cert-manager
  # Verify Cert Providing CA
  
  openssl verify -CAfile ca-keystore/ca.crt keystore/tls.crt
-
+ openssl pkcs12 -info -in truststore.p12 -passin pass:XXXXKEYSTOREPASSWORD
+ openssl pkcs12 -info -in truststore.p12 -passin pass:XXXXKEYSTOREPASSWORD
+ openssl pkcs12 -info -in keystore.p12 -passin env:keystore_password
 
  curl -vvI https://es-elasticsearch-master:9200
+ curl -vvI https://es-elasticsearch-master:9200 --cacert /etc/config/ca-keystore/ca.crt
+ curl -vvI https://es-elasticsearch-master:9200 --cacert /etc/config/ca-keystore/ca.crt
+ 
  openssl s_client -connect es-elasticsearch-master:9200 </dev/null 2>/dev/null | openssl x509 -inform pem -text
 ```
 
@@ -64,7 +69,7 @@ kubectl describe certificate  general-cert -n cert-manager
 curl -v --insecure --user elastic:123456 https://es-elasticsearch-master:9200/
 
 
-curl -v --insecure --user elastic:123456 https://es-elasticsearch-master:9200/_cluster/health?wait_for_status=green&timeout=1s
+curl -v --cacert /etc/config/ca-keystore/ca.crt --user elastic:123456 https://es-elasticsearch-master:9200/_cluster/health?wait_for_status=green&timeout=1s
 ```
 
 
@@ -102,7 +107,7 @@ kubectl get pods --namespace cert-manager
 
 ## For Deveopment use Skaffold, to deploy on minikube.
 
-
+skaffold dev --filename='skaffold-xtemp-develop.yaml'
 
 skaffold dev --filename='skaffold-xtemp-develop.yaml'
 ```

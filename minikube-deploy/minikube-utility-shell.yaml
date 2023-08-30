@@ -11,10 +11,14 @@ spec:
     volumeMounts:
     - name: keystore-certs
       mountPath: /etc/config/keystore
-    - name: keystore-password
-      mountPath: /etc/config/password
     - name: ca-keystore-certs
       mountPath: /etc/config/ca-keystore
+    env:
+      - name: KEYSTORE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: custom-environment-secret
+            key: keystore_password
   volumes:
   - name: keystore-certs
     secret:
@@ -22,6 +26,3 @@ spec:
   - name: ca-keystore-certs
     secret:
       secretName: trust-manager-base-ca-secret
-  - name: keystore-password
-    secret:
-      secretName: cert-selfsigned-custom-secret

@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: cert-selfsigned-custom-secret
+  name: custom-environment-secret
   annotations:
 #     Refer https://cert-manager.io/docs/tutorials/syncing-secrets-across-namespaces/ 
       reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
@@ -11,13 +11,14 @@ metadata:
       reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "default"
   labels:
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: custom-secure
+    app.kubernetes.io/name: custom-environment-secret
     app.kubernetes.io/source: minikube-setup-secure-certcrds.yaml
   namespace: cert-manager
 type: Opaque
 data:
   #Base64 Encoded.
-  password: "Y0dGemMzZHZjbVJtYjNKQlF6Z3lOakk0TVRNeFdGSlM="
+  keystore_password: "Y0dGemMzZHZjbVJtYjNKQlF6Z3lOakk0TVRNeFdGSlM="
+  ES_KEYSTORE_PASSWORD: "Y0dGemMzZHZjbVJtYjNKQlF6Z3lOakk0TVRNeFdGSlM="
 
 # ##############################################################################
 # A SelfSigned CA , Issuing Other Certificate
@@ -117,13 +118,13 @@ spec:
     jks:
       create: true
       passwordSecretRef: # Password used to encrypt the keystore
-        key: password
-        name: cert-selfsigned-custom-secret
+        key: keystore_password
+        name: custom-environment-secret
     pkcs12:
       create: true
       passwordSecretRef: # Password used to encrypt the keystore
-        key: password
-        name: cert-selfsigned-custom-secret
+        key: keystore_password
+        name: custom-environment-secret
 
 # 2. ElasticSearch Certificate .
 ---
@@ -168,13 +169,13 @@ spec:
     jks:
       create: true
       passwordSecretRef: # Password used to encrypt the keystore
-        key: password
-        name: cert-selfsigned-custom-secret
+        key: keystore_password
+        name: custom-environment-secret
     pkcs12:
       create: true
       passwordSecretRef: # Password used to encrypt the keystore
-        key: password
-        name: cert-selfsigned-custom-secret
+        key: keystore_password
+        name: custom-environment-secret
     
 # 2. Cassandra Certificate .
 ---
@@ -218,13 +219,13 @@ spec:
     jks:
       create: true
       passwordSecretRef: # Password used to encrypt the keystore
-        key: password
-        name: cert-selfsigned-custom-secret
+        key: keystore_password
+        name: custom-environment-secret
     pkcs12:
       create: true
       passwordSecretRef: # Password used to encrypt the keystore
-        key: password
-        name: cert-selfsigned-custom-secret
+        key: keystore_password
+        name: custom-environment-secret
 
 ### 
 # https://cert-manager.io/docs/projects/trust-manager/

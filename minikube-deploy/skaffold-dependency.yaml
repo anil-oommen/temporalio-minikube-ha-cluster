@@ -20,25 +20,6 @@ portForward:
 apiVersion: skaffold/v4beta6
 kind: Config
 metadata:
-  name: DeployPrometheus
-deploy: 
-  helm:
-    releases:
-      - name: pr
-        remoteChart: prometheus-repo/prometheus
-        valuesFiles:
-          - values-prometheus-basic.yaml
-portForward:
-- resourceType: service
-  resourceName: pr-prometheus-server
-  namespace: default
-  port: 80
-  localPort: 18080
-
----
-apiVersion: skaffold/v4beta6
-kind: Config
-metadata:
   name: DeployElasticsearch
 deploy: 
   helm:
@@ -54,6 +35,25 @@ portForward:
   namespace: default
   port: 9200
   localPort: 9200
+
+---
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: DeployPrometheus
+deploy: 
+  helm:
+    releases:
+      - name: pr
+        remoteChart: prometheus-repo/prometheus
+        valuesFiles:
+          - values-prometheus-basic.yaml
+portForward:
+- resourceType: service
+  resourceName: pr-prometheus-server
+  namespace: default
+  port: 80
+  localPort: 18080
 
 ---
 apiVersion: skaffold/v4beta6
