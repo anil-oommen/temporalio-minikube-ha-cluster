@@ -28,3 +28,16 @@ portForward:
   localPort: 18081
   port: 80
   address: 0.0.0.0
+
+#---
+#apiVersion: skaffold/v4beta6
+#kind: Config
+#metadata:
+#  name: CustomTemporalUtilities
+#deploy: 
+#  helm:
+#    releases:
+#      - name: tioutils
+#        chartPath: tio2-utility/.
+#        valuesFiles:
+#          - values-temporal-on-minikube.yaml

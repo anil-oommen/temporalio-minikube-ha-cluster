@@ -6,7 +6,8 @@ metadata:
 spec:
   containers:
   - name: shellbox
-    image: google/cloud-sdk
+#    image: google/cloud-sdk
+    image: temporalio/admin-tools
     command: ["sleep","60000"]
     volumeMounts:
     - name: keystore-certs

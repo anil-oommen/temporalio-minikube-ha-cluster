@@ -60,7 +60,7 @@ kubectl describe certificate  general-cert -n cert-manager
  curl -vvI https://es-elasticsearch-master:9200 --cacert /etc/config/ca-keystore/ca.crt
  curl -vvI https://es-elasticsearch-master:9200 --cacert /etc/config/ca-keystore/ca.crt
  
- openssl s_client -connect es-elasticsearch-master:9200 </dev/null 2>/dev/null | openssl x509 -inform pem -text
+openssl s_client -connect es-elasticsearch-master:9200 </dev/null 2>/dev/null | openssl x509 -inform pem -text
 ```
 
 ## Elastic Search Diagnositics
@@ -84,6 +84,8 @@ curl -v --insecure --user elastic:123456 https://localhost:9200/_cluster/health?
 ```
 # All Dependencies
 skaffold dev --filename='skaffold-dependency.yaml'
+
+skaffold render --filename='skaffold-temporal-io.yaml' > _temp_render_temporal.yaml
 
 skaffold dev --filename='skaffold-temporal-io.yaml'
 

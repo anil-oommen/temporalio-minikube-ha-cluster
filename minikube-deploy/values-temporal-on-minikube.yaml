@@ -6,9 +6,15 @@ custom:
   curl:
     cacert: "PENDING TODO"
 
+# https://github.com/temporalio/helm-charts/blob/master/values.yaml
 
-# debug: true
+# Enable debug to ensure Job is not deleted after complettion. 
+# "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+debug: true
+
+
 server:
+  replicaCount: 2
   dynamicConfig:
     matching.numTaskqueueReadPartitions:
     - value: 10
@@ -20,9 +26,11 @@ server:
     logLevel: "debug,info"
     numHistoryShards: 512
     persistence:
+      defaultStore: default
+      visibilityStore: es-visibility
+      # num history Shards
       default:
         driver: "cassandra"
-
         cassandra:
           hosts: ["cass-cassandra.default.svc.cluster.local"]
           port: 9042
@@ -38,7 +46,6 @@ server:
 
       visibility:
         driver: "cassandra"
-
         cassandra:
           hosts: ["cass-cassandra.default.svc.cluster.local"]
           port: 9042

@@ -1,0 +1,7 @@
+apiVersion: v2
+name: temporal-utility
+description: Temporal Custom Resource Setup For Namespace Schema and Such. Uses same config as Primary 
+
+type: application
+version: 0.27.0
+appVersion: 1.21.5
