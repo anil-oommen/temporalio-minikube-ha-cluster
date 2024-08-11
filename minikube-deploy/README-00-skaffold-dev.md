@@ -98,8 +98,19 @@ curl -v --insecure --user elastic:123456 https://localhost:9200/_cluster/health?
 
 ```
 
-## Casandra Diagnostics.
+## Casandra Debugging.
 ```
+tio.k.logs tio-temporal-schema-XXXXXXX -c setup-visibility-store
+tio.k.logs tio-temporal-schema-XXXXXXX -c setup-visibility-store
+
+curl --insecure -X PUT --fail --user elastic:cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS https://es-elasticsearch-master:9200/_template/temporal_visibility_v1_template -H Content-Type: application/json --data-binary @schema/elasticsearch/visibility/index_template_v7.json
+
+---- Updated server-job.yaml to echo value
+curl --insecure -X PUT --fail --user elastic:cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS https://es-elasticsearch-master:9200/_template/temporal_visibility_v1_template -H Content-Type: application/json --data-binary @schema/elasticsearch/visibility/index_template_v7.json
+curl --insecure -X PUT --fail --user elastic:12345 https://es-elasticsearch-master:9200/temporal_visibility_v1_dev
+
+ curl --insecure --user elastic:cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS https://es-elasticsearch-master:9200/temporal_visibility_v1_dev
+
 
 ```
 
@@ -117,6 +128,8 @@ skaffold dev --filename='skaffold-temporal-io.yaml'
 helm dependency update tio5-helm/
 
 ```
+
+
 
 ################################################################
 ################################################################

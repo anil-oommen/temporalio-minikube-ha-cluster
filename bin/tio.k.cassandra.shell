@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "usage : cqlsh -u cassandra -p \$CASSANDRA_PASSWORD cass-cassandra"
+
+kubectl run --namespace default cass-cassandra-client --rm --tty -i --restart='Never' \
+   --env CASSANDRA_PASSWORD=$CASSANDRA_PASSWORD \
+   --image docker.io/bitnami/cassandra:4.1.3-debian-11-r24 -- bash
+

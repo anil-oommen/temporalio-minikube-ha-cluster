@@ -104,4 +104,5 @@ _hostPersistentVolume
 _kb8*Storage*/*
 install/
 _temp*
+.idea/*
 

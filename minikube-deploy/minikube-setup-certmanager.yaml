@@ -19,8 +19,8 @@ data:
   #Base64 Encoded.
   keystore_password: "Y0dGemMzZHZjbVJtYjNKQlF6Z3lOakk0TVRNeFdGSlM="
   ES_KEYSTORE_PASSWORD: "Y0dGemMzZHZjbVJtYjNKQlF6Z3lOakk0TVRNeFdGSlM="
-  # Elastic Secret 123456
-  ELASTIC_PASSWORD: "MTIzNDU2"
+  # Elastic Secret same
+  ELASTIC_PASSWORD: "Y0dGemMzZHZjbVJtYjNKQlF6Z3lOakk0TVRNeFdGSlM="
 
 
 # ##############################################################################
