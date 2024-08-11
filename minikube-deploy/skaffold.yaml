@@ -1,0 +1,8 @@
+apiVersion: skaffold/v1beta7
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+    - minikube-setup-resources.yaml
+    - minikube-utility-shell.yaml
+    - soak-test-kbe/deploy-kbe.yaml

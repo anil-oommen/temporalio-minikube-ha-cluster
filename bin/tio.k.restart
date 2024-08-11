@@ -1,0 +1,5 @@
+#!/bin/bash
+sudo microk8s reset
+sudo microk8s stop
+sudo microk8s start
+microk8s enable dns; microk8s enable hostpath-storage; microk8s enable dashboard

@@ -1,0 +1,3 @@
+#!/bin/bash
+cd $TIO_APP_PATH/minikube-deploy/
+skaffold dev --filename='skaffold-temporal-io.yaml'

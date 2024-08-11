@@ -103,3 +103,5 @@ _hostPersistentVolume
 .tempPersistentVolume
 _kb8*Storage*/*
 install/
+_temp*
+
