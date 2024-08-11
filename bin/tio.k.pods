@@ -1,0 +1,7 @@
+#!/bin/bash
+
+kubectl get pods -A
+
+echo ""
+echo "Temporal Pods ... "
+kubectl get pods -A -o jsonpath='{.spec.containers[*].name}' -l app.kubernetes.io/instance=tio

@@ -6,9 +6,16 @@ deploy:
   helm:
     releases:
       - name: tio
-        chartPath: tio2-helm/.
+        chartPath: tio5-helm
         valuesFiles:
-          - values-temporal-on-minikube.yaml
+          - values-temporal-on-microk8s.yaml
+        setValues:
+          cassandra.enabled: false
+          mysql.enabled: false
+          postgresql.enabled: false
+          prometheus.enabled: false
+          grafana.enabled: false
+          elasticsearch.enabled: false
 portForward:
 - resourceType: service
   resourceName: tio-temporal-frontend

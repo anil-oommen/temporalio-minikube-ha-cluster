@@ -1,0 +1,5 @@
+#!/bin/bash
+
+kubectl run --namespace default shellbox --rm --tty -i --restart='Never' \
+   --image google/cloud-sdk 
+

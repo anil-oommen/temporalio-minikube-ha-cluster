@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]
+  then
+    echo "Bash to a Running Pod"
+    echo "   Usage 0: default Container : shell PODNAME"
+    echo "   Usage 1: select  Container : shell PODNAME -c CONTAINER"
+    echo ""
+ else
+    kubectl logs "$@" 
+fi
+

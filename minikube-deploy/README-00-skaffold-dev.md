@@ -16,6 +16,19 @@ helm search repo jetstack
 helm repo add emberstack https://emberstack.github.io/helm-charts
 helm search repo reflector
 -- see annotations added to secrets to copy to other namespace.
+
+helm repo add elastic-repo https://helm.elastic.co
+helm search repo elastic-repo
+
+helm repo add prometheus-repo https://prometheus-community.github.io/helm-charts
+helm search repo prometheus-repo
+
+helm repo add grafana https://grafana.github.io/helm-charts
+helm search repo grafana
+
+helm repo add incubator https://charts.helm.sh/incubator
+
+
 ```
 
 ### Deploy CertManager and Application Cert CRDS.
@@ -37,11 +50,21 @@ kubectl describe certificate  general-cert -n cert-manager
 ```
 
 ## Utility Container
+
+# Simple Shell no Certs
+```
+kubectl run --namespace default shellbox --rm --tty -i --restart='Never' \
+   --image google/cloud-sdk 
+```
+
+# Shell With Certs
 ```
 # Commands from Utility, to diagnize the certificate.
 # for Containers with Volume Mount.
  kubectl apply -f minikube-utility-shell.yaml
  kubectl exec --stdin --tty shellbox -- /bin/bash
+
+ kubectl exec --stdin --tty tio-temporal-history-f9448d89-6mtsv -- /bin/bash
 
  cd /etc/config/...
 
@@ -73,8 +96,10 @@ curl -v --cacert /etc/config/ca-keystore/ca.crt --user elastic:123456 https://es
 
 curl -v --insecure --user elastic:123456 https://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
 
+```
 
-
+## Casandra Diagnostics.
+```
 
 ```
 
@@ -89,6 +114,7 @@ skaffold render --filename='skaffold-temporal-io.yaml' > _temp_render_temporal.y
 
 skaffold dev --filename='skaffold-temporal-io.yaml'
 
+helm dependency update tio5-helm/
 
 ```
 
