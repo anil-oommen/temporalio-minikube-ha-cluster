@@ -1,6 +1,7 @@
 ## Running Temporal Clusters on Minikube
  Evaluating a Setup for Temporal Kubernetes running on Minikube. 
 
+
 ## Version Upgrade 1.21.5 Work in Progress
  - Added CertManager and SelfSigned CA and Individual Certificates
  - elastic-search setup for HTTPS & Secret
