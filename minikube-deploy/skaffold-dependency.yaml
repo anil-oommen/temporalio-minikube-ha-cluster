@@ -21,7 +21,7 @@ deploy:
     releases:
       - name: cass
         remoteChart: bitnami-repo/cassandra
-        version: 10.5.1 # Version
+        version: 11.3.12 # Version
         valuesFiles:
           - values-cassandra-on-multinode.yaml
 portForward:

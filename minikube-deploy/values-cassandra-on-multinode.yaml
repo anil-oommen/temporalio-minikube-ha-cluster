@@ -1,10 +1,31 @@
 replicaCount: 3
 
-#persistence:
-#  enabled: true
+## Reference https://github.com/bitnami/charts/blob/main/bitnami/cassandra/values.yaml
+
+resourcesPreset: "small"
+#cluster:
+#  internodeEncryption: none
+
+
+#tls:
+#  internodeEncryption: none
+
+## # IMPORTANT --------------------
+## With each restart, the pods have new IPS and the 
+## logs would show its trying to connect to older IP endpoints! 
+## use 'nodetool status' in docker pod to check, check log files.
+##
+## Attemp 1, Trying to have to keep persistence as 'false', TODO Solution for IP Affinity 
+## 
+##
+## Attempt 2, 'nodetool repair'
+
+
+persistence:
+  enabled: false
 #  existingClaim: "cs-persistent-volume-claim"
 #  storageClass: "manual"
-#  size: 5Gi
+  size: 5Gi
 
 dbUser:
   user: cassandra

@@ -29,12 +29,12 @@ portForward:
   localPort: 15092
   port: 8080
   address: 0.0.0.0
-- resourceType: service
-  resourceName: tio-grafana
-  namespace: default
-  localPort: 18081
-  port: 80
-  address: 0.0.0.0
+#- resourceType: service
+#  resourceName: tio-grafana
+#  namespace: default
+#  localPort: 18081
+#  port: 80
+#  address: 0.0.0.0
 
 #---
 #apiVersion: skaffold/v4beta6

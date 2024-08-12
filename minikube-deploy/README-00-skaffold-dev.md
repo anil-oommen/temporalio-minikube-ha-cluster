@@ -99,10 +99,28 @@ curl -v --insecure --user elastic:123456 https://localhost:9200/_cluster/health?
 ```
 
 ## Casandra Debugging.
-```
-tio.k.logs tio-temporal-schema-XXXXXXX -c setup-visibility-store
-tio.k.logs tio-temporal-schema-XXXXXXX -c setup-visibility-store
 
+```
+tio.k.logs cass-cassandra-0
+tio.k.connect cass-cassandra-0
+    nodetool describecluster
+    nodetool status
+
+
+# Connecting with Cassandra Client.
+export CASSANDRA_PASSWORD=$(kubectl get secret --namespace "default" single-use-dev-secrets -o jsonpath="{.data.cassandra-password}" | base64 -d)
+
+kubectl run --namespace default cass-cassandra-client --rm --tty -i --restart='Never' \
+   --env CASSANDRA_PASSWORD=$CASSANDRA_PASSWORD \
+   --image docker.io/bitnami/cassandra:4.1.3-debian-11-r24 -- bash
+
+cqlsh -u cassandra -p $CASSANDRA_PASSWORD cass-cassandra
+
+```
+
+
+## Elastic Search Debugging
+```
 curl --insecure -X PUT --fail --user elastic:cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS https://es-elasticsearch-master:9200/_template/temporal_visibility_v1_template -H Content-Type: application/json --data-binary @schema/elasticsearch/visibility/index_template_v7.json
 
 ---- Updated server-job.yaml to echo value

@@ -11,7 +11,7 @@ maintainers:
     url: https://temporal.io/
 sources:
   - https://github.com/temporalio/temporal
-#dependencies:
+dependencies:
 #  - name: cassandra
 #    version: "0.14.3"
 #    repository: https://charts.helm.sh/incubator
@@ -24,10 +24,10 @@ sources:
 #    repository: https://helm.elastic.co
 #    version: 7.17.3
 #    condition: elasticsearch.enabled
-#  - name: grafana
-#    repository: https://grafana.github.io/helm-charts
-#    version: 8.0.2
-#    condition: grafana.enabled
+  - name: grafana
+    repository: https://grafana.github.io/helm-charts
+    version: 8.0.2
+    condition: grafana.enabled
 # A chart can be either an 'application' or a 'library' chart.
 #
 # Application charts are a collection of templates that can be packaged into versioned archives
