@@ -8,7 +8,15 @@
 temporalite.exe start -namespace fastns
 ```
 
-## Deploy on Minikube
+
+## Deploy on Microk8s
+### Install Docker 
+```shell
+sudo apt-get install docker.io
+sudo usermod -aG docker ${USER}
+su - ${USER}
+```
+
 ### Build Image on Docker & Deploy to minikube
 ```shell
 docker images | grep spring-boot-app

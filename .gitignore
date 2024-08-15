@@ -107,4 +107,4 @@ _temp*
 .idea/*
 
 
- **/spring-boot-app/bin/
+ spring-boot-app
