@@ -106,3 +106,5 @@ install/
 _temp*
 .idea/*
 
+
+ **/spring-boot-app/bin/
