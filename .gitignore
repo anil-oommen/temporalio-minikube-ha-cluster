@@ -2,6 +2,8 @@
 **/build/
 !src/**/build/
 
+spring-boot-app/bin*
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
@@ -107,4 +109,4 @@ _temp*
 .idea/*
 
 
- spring-boot-app
+ 

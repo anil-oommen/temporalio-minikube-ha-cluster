@@ -22,7 +22,7 @@ resourcesPreset: "small"
 
 
 persistence:
-  enabled: false
+  enabled: true
 #  existingClaim: "cs-persistent-volume-claim"
 #  storageClass: "manual"
   size: 5Gi

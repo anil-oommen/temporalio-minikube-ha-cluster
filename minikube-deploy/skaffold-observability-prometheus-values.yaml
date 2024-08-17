@@ -15,7 +15,5 @@ prometheus:
           selector:
             matchLabels:
               app.kubernetes.io/name: "prometheus-pv"
-
-thanosRuler
-  ingress:
-    thanosRulerSpec:
+podLabels:
+  "app.kubernetes.io/instance": "tio"

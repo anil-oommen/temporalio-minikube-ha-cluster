@@ -8,7 +8,7 @@ deploy:
       - name: tio
         chartPath: tio5-helm
         valuesFiles:
-          - values-temporal-on-microk8s.yaml
+          - skaffold-temporal-io_resources.yaml
         setValues:
           cassandra.enabled: false
           mysql.enabled: false

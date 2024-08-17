@@ -3,8 +3,17 @@
 ```
 skaffold config set --global local-cluster true
 skaffold init --skip-build
-
 ```
+
+# Deploying & Starting Projects
+```
+tio.k.skaffold ..
+```
+
+
+# Custom Scripts Backup. ONLY FOR REFERENCE ================================
+# --------------------------------------------------------------------------
+# ----------------------                      ------------------------------
 
 ## Cert Manager
 #### https://cert-manager.io/docs/installation/helm/
@@ -106,6 +115,9 @@ tio.k.connect cass-cassandra-0
     nodetool describecluster
     nodetool status
 
+tio.k.cassandra.nodetool status
+kubectl exec --stdin --tty cass-cassandra-1 -- nodetool status
+
 
 # Connecting with Cassandra Client.
 export CASSANDRA_PASSWORD=$(kubectl get secret --namespace "default" single-use-dev-secrets -o jsonpath="{.data.cassandra-password}" | base64 -d)
@@ -147,6 +159,13 @@ helm dependency update tio5-helm/
 
 ```
 
+### Prometheus & Grafana Setpup
+```
+ # Show default Values for Helm Chart
+ helm show values prometheus-repo/prometheus > _temp_show-values-prometheus.yaml
+
+ helm show values grafana/grafana > _temp_show-values-grafana.yaml
+```
 
 
 ################################################################

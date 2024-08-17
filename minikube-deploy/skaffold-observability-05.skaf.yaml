@@ -1,0 +1,44 @@
+## Disabled Prometheus to test use the microk8s Addon Prometheus.
+---
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: DeployPrometheus
+deploy: 
+  helm:
+    releases:
+      - name: pr
+        remoteChart: prometheus-repo/prometheus
+        version: 25.26.0
+        valuesFiles:
+#          - values-prometheus-basic.yaml
+          - skaffold-observability-prometheus-values.yaml
+portForward:
+- resourceType: service
+  resourceName: pr-prometheus-server
+  namespace: default
+  port: 80
+  localPort: 18080
+
+
+---
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: DeployGrafana
+deploy: 
+  helm:
+    releases:
+      - name: gr
+        remoteChart: grafana/grafana
+        valuesFiles:
+          - skaffold-observability-grafana-values.yaml
+# https://192.168.1.205:3000/
+# Connections http://pr-prometheus-server from Inside.
+portForward:
+- resourceType: service
+  resourceName: gr-grafana
+  namespace: default
+  port: 80
+  localPort: 3000
+  address: 0.0.0.0

@@ -3,7 +3,7 @@ kind: PersistentVolume
 metadata:
   name: pg-persistent-volume
   labels:
-    app.kubernetes.io/source: "minikube-setup-resources.yaml"
+    app.kubernetes.io/source: "skaffold-persistent-volume_resources.yaml"
     app.kubernetes.io/instance: pg
     app.kubernetes.io/name: "postgresql-pv"
 spec:
@@ -22,7 +22,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: pg-persistent-volume-claim
   labels:
-    app.kubernetes.io/source: "minikube-setup-resources.yaml"
+    app.kubernetes.io/source: "skaffold-persistent-volume_resources.yaml"
     app.kubernetes.io/instance: pg
     app.kubernetes.io/name: "postgresql-pv"
 spec:
@@ -38,7 +38,7 @@ kind: PersistentVolume
 metadata:
   name: pr-persistent-volume
   labels:
-    app.kubernetes.io/source: "minikube-setup-resources.yaml"
+    app.kubernetes.io/source: "skaffold-persistent-volume_resources.yaml"
     app.kubernetes.io/instance: pr
     app.kubernetes.io/name: "prometheus-pv"
 spec:
@@ -57,7 +57,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: pr-persistent-volume-claim
   labels:
-    app.kubernetes.io/source: "minikube-setup-resources.yaml"
+    app.kubernetes.io/source: "skaffold-persistent-volume_resources.yaml"
     app.kubernetes.io/instance: pr
     app.kubernetes.io/name: "prometheus-pv"
 spec:
@@ -73,7 +73,7 @@ kind: PersistentVolume
 metadata:
   name: cs-persistent-volume
   labels:
-    app.kubernetes.io/source: "minikube-setup-resources.yaml"
+    app.kubernetes.io/source: "skaffold-persistent-volume_resources.yaml"
     app.kubernetes.io/instance: cs
     app.kubernetes.io/name: "cassandra-pv"
 spec:
@@ -92,7 +92,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: cs-persistent-volume-claim
   labels:
-    app.kubernetes.io/source: "minikube-setup-resources.yaml"
+    app.kubernetes.io/source: "skaffold-persistent-volume_resources.yaml"
     app.kubernetes.io/instance: cs
     app.kubernetes.io/name: "cassandra-pv"
 spec:
@@ -102,23 +102,3 @@ spec:
   resources:
     requests:
       storage: 5Gi
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: single-use-dev-secrets
-type: Opaque
-data:
-  #Base64 Encoded.
-  postgres-password: "Y0dGemMzZHZjbVJtYjNKQlF6Z3lOakk0TVRNeFdGSlM="
-  cassandra-password: "Y0dGemMzZHZjbVJtYjNKQlF6Z3lOakk0TVRNeFdGSlM="
-
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: es-elasticsearch-master-credentials-disabled
-type: Opaque
-data:
-  #Base64 Encoded.
-  password: "Y0dGemMzZHZjbVJtYjNKQlF6Z3lOakk0TVRNeFdGSlM="

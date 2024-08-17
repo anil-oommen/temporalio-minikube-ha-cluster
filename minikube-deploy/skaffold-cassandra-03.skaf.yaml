@@ -1,0 +1,18 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: DeployCassandra
+deploy: 
+  helm:
+    releases:
+      - name: cass
+        remoteChart: bitnami-repo/cassandra
+        version: 11.3.12 # Version
+        valuesFiles:
+          - skaffold-cassandra_values-multinode.yaml
+portForward:
+- resourceType: service
+  resourceName: cass-cassandra
+  namespace: default
+  port: 9042
+  localPort: 9042

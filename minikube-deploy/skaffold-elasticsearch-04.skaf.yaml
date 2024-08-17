@@ -1,0 +1,20 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: DeployElasticsearch
+deploy: 
+  helm:
+    releases:
+      - name: es
+        remoteChart: elastic-repo/elasticsearch
+        version: 7.17.3
+        valuesFiles:
+          - skaffold-elasticsearch_values-multinode.yaml
+portForward:
+# https://192.168.1.205:9200/
+- resourceType: service
+  resourceName: es-elasticsearch-master
+  namespace: default
+  port: 9200
+  localPort: 9200
+  address: 0.0.0.0

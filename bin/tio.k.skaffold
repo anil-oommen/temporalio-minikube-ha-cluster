@@ -1,0 +1,44 @@
+#!/bin/bash
+cd $TIO_APP_PATH/minikube-deploy/
+
+skaf_fileName="FILE_NOT_FOUND"
+function fileByNumber(){
+  skaf_files=($(find ./*.skaf.yaml  -printf "%f\n"))
+  for skaf in ${skaf_files[*]}
+  do
+    #printf "%s\n" $skaf
+    skafNum=($(echo 0 $skaf | tr -d -c 0-9))
+    if [ $1 -eq $skafNum ]
+    then
+      skaf_fileName=$skaf
+    fi
+    printf "  [%d] %s\n" $skafNum $skaf
+  done
+}
+
+if [ $# -ne 2 ]
+  then
+    echo "Listing Available Skaffold Files..."
+    echo ""
+    echo "   Usage : skaffold deploy [ n ]  # DEPLOY "
+    echo "   Usage : skaffold delete [ n ]  # DELETE DEPLOYMENT"
+    echo "   Usage : skaffold dev    [ n ]  # RUN, Ctrl-C to Cleanup/Delete"
+    echo ""
+    fileByNumber 9999 # To Just Print
+ else
+    # to be moved to skaffold
+    fileByNumber $2
+    if [ ! -f $skaf_fileName ]; then
+      echo ""
+      echo "File $skaf_fileName Not Valid. Check Number"
+      exit 1212
+    fi  
+
+    kubectl create namespace cert-manager
+    echo ""
+    echo "Running : skaffold $1 --filename=$skaf_fileName"
+    skaffold $1 --filename=$skaf_fileName
+fi
+
+
+
