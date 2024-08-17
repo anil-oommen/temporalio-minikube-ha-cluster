@@ -19,6 +19,12 @@ su - ${USER}
 
 ### Build Image on Docker & Deploy to minikube
 ```shell
+# build and push Image.
+sh gradlew jib --info
+# pushed to 'localhost:32000/spring-boot-app'
+docker search localhost:32000
+docker search localhost:32000/spring-boot-app
+
 docker images | grep spring-boot-app
 docker image rm spring-boot-app:v2 spring-boot-app:latest 
 sh gradlew jibDockerBuild

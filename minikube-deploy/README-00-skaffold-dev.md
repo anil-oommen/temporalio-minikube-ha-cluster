@@ -5,19 +5,7 @@ skaffold config set --global local-cluster true
 skaffold init --skip-build
 ```
 
-# Deploying & Starting Projects
-```
-tio.k.skaffold ..
-```
-
-
-# Custom Scripts Backup. ONLY FOR REFERENCE ================================
-# --------------------------------------------------------------------------
-# ----------------------                      ------------------------------
-
-## Cert Manager
-#### https://cert-manager.io/docs/installation/helm/
-#### Sync Certs to other namespaces , use https://cert-manager.io/docs/tutorials/syncing-secrets-across-namespaces/
+# Setup the Required helm repos.
 ```
 helm repo add jetstack https://charts.jetstack.io
 helm search repo jetstack
@@ -37,8 +25,22 @@ helm search repo grafana
 
 helm repo add incubator https://charts.helm.sh/incubator
 
-
 ```
+
+# Deploying & Starting Projects
+```
+tio.k.skaffold .....
+```
+
+# Custom Scripts Backup. ONLY FOR REFERENCE ================================
+# --------------------------------------------------------------------------
+# ----------------------                      ------------------------------
+
+
+
+## Cert Manager
+#### https://cert-manager.io/docs/installation/helm/
+#### Sync Certs to other namespaces , use https://cert-manager.io/docs/tutorials/syncing-secrets-across-namespaces/
 
 ### Deploy CertManager and Application Cert CRDS.
 ```

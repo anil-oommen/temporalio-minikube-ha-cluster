@@ -1,0 +1,15 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: DeploySpringBootApp
+deploy: 
+  helm:
+    releases:
+      - name: spring-boot-app
+        chartPath: ../spring-boot-app/helm
+portForward:
+- resourceType: service
+  resourceName: spring-boot-app
+  namespace: default
+  port: 8081
+  localPort: 18081

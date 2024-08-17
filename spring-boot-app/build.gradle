@@ -1,13 +1,14 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.1.5'
-    id 'io.spring.dependency-management' version '1.1.3'
+    id 'org.springframework.boot' version '3.3.2'
+    id 'io.spring.dependency-management' version '1.1.6'
     //id 'com.google.cloud.tools.jib' version '3.3.1'
-    id 'org.graalvm.buildtools.native' version '0.9.28'
+     id 'com.google.cloud.tools.jib' version '3.4.3'
+    id 'org.graalvm.buildtools.native' version '0.10.2'
 }
 
 java {
-    sourceCompatibility = '21'
+    sourceCompatibility = '22'
 }
 
 graalvmNative {
@@ -19,16 +20,23 @@ graalvmNative {
 }
 
 java {
-    toolchain { languageVersion = JavaLanguageVersion.of(21) }
+    toolchain { languageVersion = JavaLanguageVersion.of(22) }
 }
 
+configurations {
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
+}
 
-/* https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin#example
 jib {
-
+    /* Configured to use 'microk8s' registry to Push Images */
+    from {
+        image = 'openjdk:22-jdk-slim'
+    }
     to {
-        image = 'spring-boot-app'
-        tags = ['v2']
+        image ='localhost:32000/spring-boot-app'
+        tags =['tio','v2']
     }
     container {
         jvmFlags = ['-Xms512m','-Xmx2g']
@@ -38,10 +46,10 @@ jib {
         environment = [
                 "spring_profiles_active":"kbe"
         ]
-
-
     }
-} */
+    allowInsecureRegistries = true
+}
+
 
 group 'com.oom.temporal'
 version '0.0.5'

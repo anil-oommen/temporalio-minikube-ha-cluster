@@ -5,4 +5,4 @@ sudo microk8s start
 microk8s enable dns; microk8s enable hostpath-storage; microk8s enable dashboard
 echo "Enabling Required Addons ..."
 microk8s enable prometheus
-microk8s enable registry
+microk8s enable registry:size=40Gi
