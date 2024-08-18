@@ -21,6 +21,8 @@ su - ${USER}
 ```shell
 # build and push Image.
 sh gradlew jib --info
+
+## NOT WORKING , IMAGE SEARCH FOR microk8s Registry !!!!!!!!!!
 # pushed to 'localhost:32000/spring-boot-app'
 docker search localhost:32000
 docker search localhost:32000/spring-boot-app

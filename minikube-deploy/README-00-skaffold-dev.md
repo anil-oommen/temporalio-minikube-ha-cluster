@@ -30,6 +30,8 @@ helm repo add incubator https://charts.helm.sh/incubator
 # Deploying & Starting Projects
 ```
 tio.k.skaffold .....
+# Find ports Listening to.
+sudo lsof -i -P -n | grep LISTEN
 ```
 
 # Custom Scripts Backup. ONLY FOR REFERENCE ================================

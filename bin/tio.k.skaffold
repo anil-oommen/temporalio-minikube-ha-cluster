@@ -2,6 +2,7 @@
 cd $TIO_APP_PATH/minikube-deploy/
 
 skaf_fileName="FILE_NOT_FOUND"
+skaf_fileNamesContent=""
 function fileByNumber(){
   skaf_files=($(find ./*.skaf.yaml  -printf "%f\n"))
   for skaf in ${skaf_files[*]}
@@ -12,17 +13,20 @@ function fileByNumber(){
     then
       skaf_fileName=$skaf
     fi
-    printf "  [%d] %s\n" $skafNum $skaf
+    #printf "  [%d] %s\n" $skafNum $skaf
+    skaf_fileNamesContent+=$(printf "  [%d]-%s " $skafNum $skaf)
   done
+  # printf "%s\n" $skaf_fileNamesContent # Print Unordered.
+  echo $skaf_fileNamesContent | sed 's/ /\n/g' | sort
 }
 
 if [ $# -ne 2 ]
   then
     echo "Listing Available Skaffold Files..."
     echo ""
-    echo "   Usage : skaffold deploy [ n ]  # DEPLOY "
-    echo "   Usage : skaffold delete [ n ]  # DELETE DEPLOYMENT"
-    echo "   Usage : skaffold dev    [ n ]  # RUN, Ctrl-C to Cleanup/Delete"
+    echo "   Usage : skaffold deploy [ n ]  # Non-Blocking, Will not have PortForward Running"
+    echo "   Usage : skaffold delete [ n ]  # Remove Deployment"
+    echo "   Usage : skaffold dev    [ n ]  # Blocking, Ctrl-C to Cleanup/Delete, PortForward will "
     echo ""
     fileByNumber 9999 # To Just Print
  else
@@ -37,7 +41,7 @@ if [ $# -ne 2 ]
     kubectl create namespace cert-manager
     echo ""
     echo "Running : skaffold $1 --filename=$skaf_fileName"
-    skaffold $1 --filename=$skaf_fileName
+    skaffold $1 --filename=$skaf_fileName 
 fi
 
 

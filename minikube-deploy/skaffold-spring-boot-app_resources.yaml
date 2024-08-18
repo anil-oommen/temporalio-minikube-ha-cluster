@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: tio-spring-boot-temporal-setup
+  annotations:
+      app.kubernetes.io/instance: tio
+  labels:
+    app.kubernetes.io/instance: tio
+  namespace: default
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: setup-namespace
+          image: temporalio/admin-tools:1.24.2-tctl-1.18.1-cli-0.13.0
+          #command: ["sleep","100000"]
+          command: ["temporal","operator","namespace","create","fastns"]
+          env:
+            - name: TEMPORAL_ADDRESS
+              value: tio-temporal-frontend.default.svc.cluster.local:7233

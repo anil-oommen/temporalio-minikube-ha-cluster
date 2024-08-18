@@ -36,7 +36,7 @@ jib {
     }
     to {
         image ='localhost:32000/spring-boot-app'
-        tags =['tio','v2']
+        tags =['tio','v3']
     }
     container {
         jvmFlags = ['-Xms512m','-Xmx2g']

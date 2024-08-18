@@ -1,6 +1,19 @@
 apiVersion: skaffold/v4beta6
 kind: Config
 metadata:
+  name: AppSpringBootResources
+deploy: 
+  kubectl:
+    flags:
+      disableValidation: false
+manifests:
+  rawYaml: 
+    - skaffold-spring-boot-app_resources.yaml
+
+---
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
   name: DeploySpringBootApp
 deploy: 
   helm:
@@ -11,5 +24,6 @@ portForward:
 - resourceType: service
   resourceName: spring-boot-app
   namespace: default
-  port: 8081
-  localPort: 18081
+  port: 80
+  localPort: 18080
+  address: 0.0.0.0

@@ -56,3 +56,7 @@ dashboards:
   #   local-dashboard:
   #     url: https://example.com/repository/test.json
   #     token: ''
+
+service:
+  port: 3000
+  targetPort: 3000
