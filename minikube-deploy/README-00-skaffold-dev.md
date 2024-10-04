@@ -59,7 +59,8 @@ kubectl describe certificate  general-cert -n cert-manager
 # if not ' The certificate has been successfully issued' then still in progress.
 
  kubectl get Issuers,ClusterIssuers,Certificates,CertificateRequests,Orders,Challenges --all-namespaces
-
+ openssl s_client es-elasticsearch-master:9200
+ 
 ```
 
 ## Utility Container
@@ -70,14 +71,32 @@ kubectl run --namespace default shellbox --rm --tty -i --restart='Never' \
    --image google/cloud-sdk 
 ```
 
-# Shell With Certs
-```
-# Commands from Utility, to diagnize the certificate.
-# for Containers with Volume Mount.
- kubectl apply -f minikube-utility-shell.yaml
- kubectl exec --stdin --tty shellbox -- /bin/bash
+### Shell With Certs
 
- kubectl exec --stdin --tty tio-temporal-history-f9448d89-6mtsv -- /bin/bash
+Commands from Utility, to diagnize the certificate.
+for Containers with Volume Mount.
+
+skaffold deploy shellbox , connect 
+
+### Verify Certs generated 
+
+```
+cd  /mnt/tls/cert
+ openssl verify -CAfile ca/ca.crt cassandra/tls.crt
+ openssl x509 -in cassandra/tls.crt -text -noout
+ openssl x509 -in ca/tls.crt -text -noout
+```
+Access Endpoints 
+```
+ curl -vvI https://es-elasticsearch-master:9200 --cacert temporal/ca.crt
+```
+
+
+
+
+
+
+
 
  cd /etc/config/...
 

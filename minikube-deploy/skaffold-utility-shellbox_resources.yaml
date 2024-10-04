@@ -12,8 +12,14 @@ spec:
     volumeMounts:
     - name: keystore-certs
       mountPath: /etc/config/keystore
-    - name: ca-keystore-certs
-      mountPath: /etc/config/ca-keystore
+    - name: ca-certificates
+      mountPath: /mnt/tls/cert/ca
+    - name: temporal-certificates
+      mountPath: /mnt/tls/cert/temporal
+    - name: elasticsearch-certificates
+      mountPath: /mnt/tls/cert/elasticsearch
+    - name: cassandra-certificates
+      mountPath: /mnt/tls/cert/cassandra
     env:
       - name: KEYSTORE_PASSWORD
         valueFrom:
@@ -24,6 +30,15 @@ spec:
   - name: keystore-certs
     secret:
       secretName: general-cert-secret
-  - name: ca-keystore-certs
+  - name: ca-certificates
     secret:
       secretName: trust-manager-base-ca-secret
+  - name: temporal-certificates
+    secret:
+      secretName: temporal-cert-secret
+  - name: elasticsearch-certificates
+    secret:
+      secretName: elasticsearch-cert-secret
+  - name: cassandra-certificates
+    secret:
+      secretName: cassandra-cert-secret

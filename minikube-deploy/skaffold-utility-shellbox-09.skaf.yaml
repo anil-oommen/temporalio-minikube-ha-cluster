@@ -1,0 +1,11 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: ShellboxResources
+deploy: 
+  kubectl:
+    flags:
+      disableValidation: false
+manifests:
+  rawYaml: 
+    - skaffold-utility-shellbox_resources.yaml

@@ -13,8 +13,8 @@ function fileByNumber(){
     then
       skaf_fileName=$skaf
     fi
-    #printf "  [%d] %s\n" $skafNum $skaf
-    skaf_fileNamesContent+=$(printf "  [%d]-%s " $skafNum $skaf)
+    #printf "++  [%d] %s\n" $((10#$skafNum)) $skaf
+    skaf_fileNamesContent+=$(printf "  [%d]-%s " $((10#$skafNum)) $skaf)
   done
   # printf "%s\n" $skaf_fileNamesContent # Print Unordered.
   echo $skaf_fileNamesContent | sed 's/ /\n/g' | sort
