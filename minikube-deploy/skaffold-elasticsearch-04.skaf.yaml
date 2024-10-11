@@ -8,6 +8,7 @@ deploy:
       - name: es
         remoteChart: elastic-repo/elasticsearch
         version: 7.17.3
+#        version: 8.5.1
         valuesFiles:
           - skaffold-elasticsearch_values-multinode.yaml
 portForward:

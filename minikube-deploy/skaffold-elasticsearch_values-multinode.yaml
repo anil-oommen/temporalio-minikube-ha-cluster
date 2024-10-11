@@ -5,7 +5,7 @@
 # 
 
 clusterName: "es-elasticsearch"
-replicas: 1
+replicas: 3
 # imageTag: 7.17.3
 minimumMasterNodes: 1
 
@@ -25,7 +25,7 @@ persistence:
   enabled: true
 
 # Elastic Password/secret to access service.
-# CURL Authentication with --user elastic:123456 
+# CURL Authentication with --user elastic:123456 (new Password : cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS)
 extraEnvs:
   - name: ELASTIC_PASSWORD
     valueFrom:
@@ -33,8 +33,8 @@ extraEnvs:
         name: custom-environment-secret
         key: ELASTIC_PASSWORD
 
-secret:
-  enabled: true   # cant set to false, throws readiness probe ELASTIC_PASSWORD missing.
+#secret:
+#  enabled: true   # cant set to false, throws readiness probe ELASTIC_PASSWORD missing.
 #  password: ""    # Used in Newer Version 8.x, empty generates a password
 #  password: "123456"
 
@@ -43,7 +43,7 @@ esConfig:
     # https://www.elastic.co/guide/en/elasticsearch/reference/current/security-settings.html
     xpack.security.enabled: true
     xpack.security.transport.ssl.enabled: true
-    xpack.security.transport.ssl.verification_mode: certificate
+    xpack.security.transport.ssl.verification_mode: none
     xpack.security.transport.ssl.keystore.path: /usr/share/elasticsearch/config/certs/keystore.p12
     xpack.security.transport.ssl.keystore.password: ${ES_KEYSTORE_PASSWORD}
     xpack.security.transport.ssl.truststore.path: /usr/share/elasticsearch/config/certs/truststore.p12

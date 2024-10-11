@@ -102,19 +102,18 @@ server:
     # Define your TLS configuration here. See https://docs.temporal.io/references/configuration#tls
     # for configuration options. You must also use `server.additionalVolumeMounts` and `server.additionalVolumes`
     # to mount certificates (from Secret or ConfigMap etc) to the path you use below.
-    # tls:
-    #   internode:
-    #     server:
-    #       certFile: /path/to/internode/cert/file
-    #       keyFile: /path/to/internode/key/file
-    #       requireClientAuth: true
-    #       clientCaFiles:
-    #         - /path/to/internode/serverCa
-    #     client:
-    #       serverName: dnsSanInInternodeCertificate
-    #       rootCaFiles:
-    #         - /path/to/internode/serverCa
-    #   frontend:
+    tls:
+      internode:
+        server:
+          certFile: /mnt/tls/cert/tls.crt
+          keyFile: /mnt/tls/cert/tls.key
+          clientCaFiles:
+            - /mnt/tls/cert/ca.crt
+        client:
+          serverName: dnsSanInInternodeCertificate
+          rootCaFiles:
+          - /mnt/tls/cert/ca.crt
+    #  frontend:
     #     server:
     #       certFile: /path/to/frontend/cert/file
     #       keyFile: /path/to/frontend/key/file

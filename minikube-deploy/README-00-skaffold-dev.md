@@ -121,12 +121,17 @@ openssl s_client -connect es-elasticsearch-master:9200 </dev/null 2>/dev/null | 
 ## Elastic Search Diagnositics
 ```
 # Check Elastic Search Indexes available
-curl -v --insecure --user elastic:123456 https://es-elasticsearch-master:9200/
+_PASSWORD_ currently cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS
+curl -v --insecure --user elastic:_PASSWORD_ https://es-elasticsearch-master:9200/
+
+ curl -v  --user elastic:_PASSWORD_ https://es-elasticsearch-master:9200/ --cacert /mnt/tls/cert/temporal/ca.crt
+
+ curl -v --insecure  --user elastic:_PASSWORD_ https://127.0.0.1:9200/_cluster/health?wait_for_status=green&timeout=1s
 
 
-curl -v --cacert /etc/config/ca-keystore/ca.crt --user elastic:123456 https://es-elasticsearch-master:9200/_cluster/health?wait_for_status=green&timeout=1s
+curl -v --cacert /etc/config/ca-keystore/ca.crt --user elastic:_PASSWORD_ https://es-elasticsearch-master:9200/_cluster/health?wait_for_status=green&timeout=1s
 
-curl -v --insecure --user elastic:123456 https://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
+curl -v --insecure --user elastic:_PASSWORD_ https://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
 
 ```
 
