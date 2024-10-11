@@ -114,13 +114,21 @@ Access Endpoints
  curl -vvI https://es-elasticsearch-master:9200
  curl -vvI https://es-elasticsearch-master:9200 --cacert /etc/config/ca-keystore/ca.crt
  curl -vvI https://es-elasticsearch-master:9200 --cacert /etc/config/ca-keystore/ca.crt
+
+## Verify from Temporal Containers
+ curl -v  --user elastic:cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS https://es-elasticsearch-master:9200/ --cacert /mnt/tls/ca/ca.crt
  
+ curl -v  --user elastic:cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS https://es-elasticsearch-master:9200/ --cacert /mnt/tls/cert/ca.crt 
+
+
 openssl s_client -connect es-elasticsearch-master:9200 </dev/null 2>/dev/null | openssl x509 -inform pem -text
 ```
 
+
+
 ## Elastic Search Diagnositics
 ```
-# Check Elastic Search Indexes available
+# Check Elastic Search Indexes available ==========================================
 _PASSWORD_ currently cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS
 curl -v --insecure --user elastic:_PASSWORD_ https://es-elasticsearch-master:9200/
 
@@ -134,6 +142,15 @@ curl -v --cacert /etc/config/ca-keystore/ca.crt --user elastic:_PASSWORD_ https:
 curl -v --insecure --user elastic:_PASSWORD_ https://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s
 
 ```
+# ElasticSearch tls, configure Temporal to use TLS
+https://github.com/temporalio/temporal/blob/main/common/persistence/visibility/store/elasticsearch/client/config.go
+https://github.com/temporalio/temporal/blob/main/common/auth/tls.go
+
+Helm Template does not support it so needs to be upgraded.
+
+
+
+
 
 ## Casandra Debugging.
 

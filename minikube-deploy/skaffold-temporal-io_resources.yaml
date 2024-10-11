@@ -119,6 +119,9 @@ elasticsearch:
   logLevel: "info"
   username: "elastic"
   password: "cGFzc3dvcmRmb3JBQzgyNjI4MTMxWFJS"
+  tls:
+    enabled: true
+    caFile: /mnt/tls/cert/ca.crt
 
 disabledelasticsearch:
   enabled: true

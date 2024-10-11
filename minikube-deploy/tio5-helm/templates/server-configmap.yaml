@@ -57,6 +57,10 @@ data:
             username: "{{ $elasticsearch.username }}"
             password: {{ `{{ .Env.TEMPORAL_VISIBILITY_STORE_PASSWORD  | quote }}` }}
             logLevel: "{{ $elasticsearch.logLevel }}"
+            {{- with $elasticsearch.tls }}
+            tls:
+              {{- toYaml . | nindent 13 }}
+            {{- end }}
             indices:
                 visibility: "{{ $elasticsearch.visibilityIndex }}"
         {{- else if eq (include "temporal.persistence.driver" (list $ "visibility")) "sql" }}

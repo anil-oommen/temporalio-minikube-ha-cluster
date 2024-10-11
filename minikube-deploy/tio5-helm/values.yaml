@@ -113,6 +113,11 @@ server:
           serverName: dnsSanInInternodeCertificate
           rootCaFiles:
           - /mnt/tls/cert/ca.crt
+      frontend:
+        client:
+          serverName: dnsSanInInternodeCertificate
+          rootCaFiles:
+          - /mnt/tls/cert/ca.crt
     #  frontend:
     #     server:
     #       certFile: /path/to/frontend/cert/file
