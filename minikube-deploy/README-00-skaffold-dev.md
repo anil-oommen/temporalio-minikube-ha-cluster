@@ -146,7 +146,13 @@ curl -v --insecure --user elastic:_PASSWORD_ https://localhost:9200/_cluster/hea
 https://github.com/temporalio/temporal/blob/main/common/persistence/visibility/store/elasticsearch/client/config.go
 https://github.com/temporalio/temporal/blob/main/common/auth/tls.go
 
-Helm Template does not support it so needs to be upgraded.
+
+Helm Template does not support it so needs to be upgraded. See configs related.
+```
+   minikube-deploy/skaffold-temporal-io_resources.yaml
+   minikube-deploy/tio5-helm/values.yaml
+```
+
 
 
 
