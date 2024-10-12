@@ -36,6 +36,22 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
+volumes:
+  - name: application-certificates
+    secret:
+      secretName: "app-cert-secret"
+  - name: ca-certificates
+    secret:
+      secretName: "trust-manager-base-ca-secret"
+
+volumeMounts:
+  - name: application-certificates
+    mountPath: "/mnt/tls/cert"
+    readOnly: true
+  - name: ca-certificates
+    mountPath: "/mnt/tls/ca"
+    readOnly: true
+
 service:
   type: ClusterIP
   port: 80
