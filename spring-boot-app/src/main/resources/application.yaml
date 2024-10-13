@@ -2,6 +2,30 @@ server:
   port: 8081
 
 spring:
+  application:
+    name: spring-boot-app
+  temporal:
+    connection:
+      target: 192.168.1.205:7233
+      target.namespace: fastns
+    workers:
+      - task-queue: Q1-TASK_QUEUE
+        capacity:
+          max-concurrent-workflow-task-pollers: 6
+          max-concurrent-activity-task-pollers: 6
+        rate-limits:
+          max-worker-activities-per-second: 0
+          max-task-queue-activities-per-second: 0
+    workflow-cache:
+      max-instances: 10
+      max-threads: 10
+    workersAutoDiscovery:
+      packages: com.oom.temporal.workers
+    start-workers: true
+    workflow-stubs-options:
+      'com.oom.temporal.workers.workflow.CancelableWorkflow':
+        task-queue: Q1-TASK_QUEUE
+
   threads:
     virtual:
       enabled: true
@@ -12,7 +36,8 @@ app:
     temporal:
       tio1:
         name: tio1
-        target: 192.168.1.205:15233
+        target: 192.168.1.205:7233
+        target_microk8: 192.168.1.205:15233
         namespace: fastns
         task-queue: "SIMPLE_TASK_QUEUE"
         use-search-attribute: false

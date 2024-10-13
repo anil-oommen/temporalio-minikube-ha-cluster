@@ -2,6 +2,7 @@ package com.oom.temporal.web;
 
 
 import com.oom.temporal.service.WorkflowConnect;
+import io.temporal.client.WorkflowClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +16,10 @@ import java.util.stream.Collectors;
 
 public class LaunchController {
 
+    //@Autowired
+    //WorkflowConnect workflowConnect;
     @Autowired
-    WorkflowConnect workflowConnect;
+    WorkflowClient client;
 
     String responseContentTemplate = """
             <html><body>%s</body></html>
@@ -30,8 +33,8 @@ public class LaunchController {
                         <a href=\"launch-cancellable/tio1/0\" > launch-cancellable/tio1/0</a> 
                         """)));
     }
-
-    @GetMapping("/launch-cancellable/{tio}/{count}") /* FOR CANCELLABLE WORKFLOW */
+/*
+    @GetMapping("/launch-cancellable/{tio}/{count}") *//* FOR CANCELLABLE WORKFLOW *//*
     public Mono<ResponseEntity<String>> launchCancellable(@PathVariable("tio") String tioInstance,
                                      @PathVariable("count") int count) {
         return workflowConnect.launchCancellableWorkflow(tioInstance,count)
@@ -58,7 +61,7 @@ public class LaunchController {
         return workflowConnect.cancelActivity(tioInstance, workflowid,runid,reason);
     }
 
-    @GetMapping("/launch-loaded/{tio}/{count}") /* FOR LOADED WORKFLOW */
+    @GetMapping("/launch-loaded/{tio}/{count}") *//* FOR LOADED WORKFLOW *//*
     public Mono<ResponseEntity<String>> launchLoaded(@PathVariable("tio") String tioInstance,
                                                @PathVariable("count") int count) {
         return workflowConnect.launchLoadedWorkflow(tioInstance,count)
@@ -72,6 +75,6 @@ public class LaunchController {
                         ResponseEntity.accepted().contentType(MediaType.TEXT_HTML)
                                 .body(String.format(responseContentTemplate,content)));
 
-    }
+    }*/
 
 }

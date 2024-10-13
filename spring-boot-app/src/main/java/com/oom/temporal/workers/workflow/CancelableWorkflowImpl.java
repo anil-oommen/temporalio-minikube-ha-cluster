@@ -1,11 +1,13 @@
 package com.oom.temporal.workers.workflow;
 
+import com.oom.temporal.workers.Shared;
 import com.oom.temporal.workers.activties.CancelableActivities;
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
 import io.temporal.activity.ActivityCancellationType;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.common.RetryOptions;
+import io.temporal.spring.boot.WorkflowImpl;
 import io.temporal.workflow.Async;
 import io.temporal.workflow.CancellationScope;
 import io.temporal.workflow.Promise;
@@ -17,6 +19,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
+@WorkflowImpl(taskQueues = Shared.TASK_QUEUE)
 public class CancelableWorkflowImpl implements CancelableWorkflow {
 
     ActivityOptions options = ActivityOptions.newBuilder()

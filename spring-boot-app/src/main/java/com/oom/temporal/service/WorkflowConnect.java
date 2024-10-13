@@ -1,11 +1,10 @@
 package com.oom.temporal.service;
 
-import com.oom.temporal.workers.WorkflowControl;
+import com.oom.temporal.client.WorkflowControl;
 import com.oom.temporal.config.TioConfig;
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -13,7 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Service
+//@Service
 public class WorkflowConnect {
 
     @Autowired

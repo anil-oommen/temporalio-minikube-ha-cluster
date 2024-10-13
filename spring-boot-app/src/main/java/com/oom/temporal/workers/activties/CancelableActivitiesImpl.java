@@ -1,15 +1,20 @@
 package com.oom.temporal.workers.activties;
 
+import com.oom.temporal.workers.Shared;
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
 import io.temporal.activity.Activity;
 import io.temporal.client.ActivityCanceledException;
 import io.temporal.client.ActivityNotExistsException;
+import io.temporal.spring.boot.ActivityImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
 @Slf4j
+@Component
+@ActivityImpl(taskQueues = Shared.TASK_QUEUE)
 public class CancelableActivitiesImpl implements CancelableActivities {
     @Override
     @Timed(value = "simpleTaskFunction1.timer")

@@ -1,11 +1,12 @@
 ## Spring Boot App with Temporal Workflows and Activities running. 
 
 ## Local Development
- * use Local Temporallite.
+ * use Local/Workstation Cli.
  * [Launch Cancellable Workflow](http://localhost:8081/temporal/launch-cancellable/tio1/1)
  * [Launch Loaded Workflow](http://localhost:8081/temporal/launch-loaded/tio1/1)
 ```shell
-temporalite.exe start -namespace fastns
+
+./temporal server start-dev --ip 0.0.0.0  --namespace fastns
 ```
 
 
